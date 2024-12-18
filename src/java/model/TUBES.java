@@ -3,7 +3,7 @@
  */
 
 
-package com.mycompany.tubes;
+package model;
 
 /**
  *
@@ -15,7 +15,7 @@ public class TUBES {
         Perpustakaan perpustakaan = new Perpustakaan();
 
         // Menambahkan Item
-        Buku buku1 = new Buku("Pemrograman Java", "B001", false, "John Doe", 2020);
+        Buku buku1 = new Buku("Pemrograman Java", "B001", "John Doe", 2020);
         CD cd1 = new CD("Musik Klasik", "C001", true, "Beethoven", 60);
         DVD dvd1 = new DVD("Film Aksi", "D001", true, "Steven Spielberg", 120);
 

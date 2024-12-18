@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.tubes;
+package model;
 
 /**
  *
@@ -15,7 +15,7 @@ public class AnggotaUmum extends Anggota {
 
     @Override
     public void pinjamItem(ItemPerpustakaan item, String tanggalPinjam) {
-        if (item.isReserved()) {
+        if (item.isReserved) {
             item.setStatusDipinjam(true);
             System.out.println(nama + " meminjam " + item.judul + " pada " + tanggalPinjam);
         } else {
