@@ -12,8 +12,8 @@ public class DVD extends ItemPerpustakaan {
     private String sutradara;
     private int durasi;
 
-    public DVD(String judul, String idItem, boolean statusDipinjam, String sutradara, int durasi) {
-        super(judul, idItem, statusDipinjam);
+    public DVD(String judul, String idItem, String sutradara, int durasi) {
+        super(judul, idItem);
         this.sutradara = sutradara;
         this.durasi = durasi;
     }
@@ -21,6 +21,6 @@ public class DVD extends ItemPerpustakaan {
     @Override
     public void tampilkanInfo() {
         System.out.println("DVD: " + judul + " | Sutradara: " + sutradara + " | Durasi: " + durasi + " menit");
-        System.out.println("Status: " + (statusDipinjam ? "Dipinjam" : "Tersedia"));
+        //System.out.println("Status: " + (statusDipinjam ? "Dipinjam" : "Tersedia"));
     }
 }

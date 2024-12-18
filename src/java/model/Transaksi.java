@@ -12,9 +12,9 @@ public abstract class Transaksi {
     protected String idTransaksi;
     protected ItemPerpustakaan item;
     protected Anggota anggota;
-    protected String tanggalTransaksi;
+    protected long tanggalTransaksi;
 
-    public Transaksi(String idTransaksi, ItemPerpustakaan item, Anggota anggota, String tanggalTransaksi) {
+    public Transaksi(String idTransaksi, ItemPerpustakaan item, Anggota anggota, long tanggalTransaksi) {
         this.idTransaksi = idTransaksi;
         this.item = item;
         this.anggota = anggota;

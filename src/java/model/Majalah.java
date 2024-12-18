@@ -19,6 +19,6 @@ public class Majalah extends ItemPerpustakaan {
     @Override
     public void tampilkanInfo() {
         System.out.println("Majalah: " + judul + " | Edisi: " + edisi);
-        System.out.println("Status: " + (statusDipinjam ? "Dipinjam" : "Tersedia"));
+        //System.out.println("Status: " + (statusDipinjam ? "Dipinjam" : "Tersedia"));
     }
 }

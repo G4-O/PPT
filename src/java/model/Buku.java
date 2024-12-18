@@ -29,6 +29,6 @@ public class Buku extends ItemPerpustakaan {
     @Override
     public void tampilkanInfo() {
         System.out.println("Buku: " + judul + " | Penulis: " + penulis + " | Tahun: " + tahunTerbit);
-        System.out.println("Status: " + (statusDipinjam ? "Dipinjam" : "Tersedia"));
+        //System.out.println("Status: " + (statusDipinjam() ? "Dipinjam" : "Tersedia"));
     }
 }

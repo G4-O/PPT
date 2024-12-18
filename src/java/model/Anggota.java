@@ -3,39 +3,39 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Belacks
  */
-public abstract class Anggota implements ManajemenPeminjaman {
+public class Anggota implements ManajemenPeminjaman {
     protected String nama;
     protected String idAnggota;
-    protected ArrayList<ItemPerpustakaan> daftarPinjaman = new ArrayList<>();
-    protected ArrayList<ItemPerpustakaan> daftarReservasi = new ArrayList<>(); // Daftar item yang direservasi
-
+    
     public Anggota(String nama, String idAnggota) {
         this.nama = nama;
         this.idAnggota = idAnggota;
     }
 
     // Method untuk melakukan reservasi item perpustakaan
-    public void reservasiItem(ItemPerpustakaan item) {
-        if (!item.isReserved) {
-            item.reservasiItem();
-            daftarReservasi.add(item);
+    @Override
+    public void pinjamItem(ItemPerpustakaan item, long durasiPinjam, List<Peminjaman> l) {
+        long unixTime = System.currentTimeMillis() / 1000L;
+        if (item.isAvailable(l)) {
+            item.pinjamItem(l, this, unixTime+durasiPinjam);
+            System.out.println(nama + " meminjam " + item.judul + " selama " + String.valueOf(durasiPinjam/(3600*24)) +" hari");
         } else {
-            System.out.println("Item sudah direservasi oleh orang lain.");
+            System.out.println("Item tidak tersedia.");
         }
     }
-
-    public void tampilkanDaftarReservasi() {
-        System.out.println("Daftar Reservasi untuk " + nama + ":");
-        for (ItemPerpustakaan item : daftarReservasi) {
-            System.out.println("- " + item.judul);
-        }
+    @Override
+    public void kembalikanItem(ItemPerpustakaan item, List<Peminjaman> l) {
+        item.batalkanPeminjaman(item.idItem, l);
+        System.out.println(nama + " mengembalikan " + item.judul);
     }
-
-    public abstract void tampilkanInfo();
+    public void tampilkanInfo(){
+        System.out.println("id: "+idAnggota);
+        System.out.println("nama: "+nama);
+    };
 }

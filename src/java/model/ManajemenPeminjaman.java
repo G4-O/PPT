@@ -4,11 +4,13 @@
  */
 package model;
 
+import java.util.List;
+
 /**
  *
  * @author Belacks
  */
 public interface ManajemenPeminjaman {
-    void pinjamItem(ItemPerpustakaan item, String tanggalPinjam);
-    void kembalikanItem(ItemPerpustakaan item, String tanggalKembali);
+    void pinjamItem(ItemPerpustakaan item, long durasiPinjam, List<Peminjaman> l);
+    void kembalikanItem(ItemPerpustakaan item, List<Peminjaman> l);
 }

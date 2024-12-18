@@ -9,9 +9,9 @@ package model;
  * @author Belacks
  */
 public class Peminjaman extends Transaksi {
-    private String tanggalKembali;
+    private long tanggalKembali;
 
-    public Peminjaman(String idTransaksi, ItemPerpustakaan item, Anggota anggota, String tanggalTransaksi, String tanggalKembali) {
+    public Peminjaman(String idTransaksi, ItemPerpustakaan item, Anggota anggota, long tanggalTransaksi, long tanggalKembali) {
         super(idTransaksi, item, anggota, tanggalTransaksi);
         this.tanggalKembali = tanggalKembali;
     }
@@ -23,5 +23,9 @@ public class Peminjaman extends Transaksi {
         System.out.println("Anggota: " + anggota.nama);
         System.out.println("Tanggal Peminjaman: " + tanggalTransaksi);
         System.out.println("Tanggal Kembali: " + tanggalKembali);
+    }
+
+    public long getTanggalKembali() {
+        return tanggalKembali;
     }
 }

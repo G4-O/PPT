@@ -11,7 +11,7 @@ package model;
 public class Pengembalian extends Transaksi {
     private int denda;
 
-    public Pengembalian(String idTransaksi, ItemPerpustakaan item, Anggota anggota, String tanggalTransaksi, int denda) {
+    public Pengembalian(String idTransaksi, ItemPerpustakaan item, Anggota anggota, long tanggalTransaksi, int denda) {
         super(idTransaksi, item, anggota, tanggalTransaksi);
         this.denda = denda;
     }
