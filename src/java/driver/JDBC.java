@@ -17,13 +17,14 @@ public class JDBC {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/test","root","");
+            "jdbc:mysql://localhost:3306/perpustakaan_db","root","");
             stmt = con.createStatement();
             isConnected = true;
             message = "DB connected";
         } catch(Exception e) {
+            
             isConnected = false;
-            message = e.getMessage();
+            message = "error:"+e.getMessage();
         }
     }
     public void disconnect() {
@@ -35,4 +36,6 @@ public class JDBC {
             message = e.getMessage();
         }
     }
+    
+    // CREATE TABLE ..(...)..
 }
