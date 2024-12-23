@@ -24,6 +24,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", username);
             session.setAttribute("isLoggedIn", true);
+            session.setAttribute("idUser", user.getIdUser()); // Simpan sebagai Integer
             
             response.sendRedirect("index.jsp");
         } else {

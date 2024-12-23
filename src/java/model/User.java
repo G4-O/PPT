@@ -20,6 +20,8 @@ public class User {
     private String username;
     private String email;
     private String password;
+    private int idUser;  // Tambahkan properti idUser
+
 
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/perpustakaan_db";
     private static final String JDBC_USERNAME = "root"; // Ganti dengan username database Anda
@@ -63,6 +65,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public int getIdUser() {
+        return idUser;
+    }
 
     // Method to save new user to the database (signup)
     public boolean save() {
@@ -103,6 +109,10 @@ public class User {
                 preparedStatement.setString(2, password);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    this.idUser = resultSet.getInt("id");  // Ambil idUser setelah autentikasi
+                    return true;
+                }
                 return resultSet.next();
             }
         } catch (SQLException e) {

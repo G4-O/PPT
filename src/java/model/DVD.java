@@ -1,26 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author Belacks
- */
 public class DVD extends ItemPerpustakaan {
     private String sutradara;
     private int durasi;
+    private String gambarUrl;
 
-    public DVD(String judul, String idItem, String sutradara, int durasi) {
+    public DVD(String judul, String idItem, String sutradara, int durasi, String gambarUrl) {
         super(judul, idItem);
         this.sutradara = sutradara;
         this.durasi = durasi;
+        this.gambarUrl = gambarUrl;
     }
 
     @Override
     public void tampilkanInfo() {
         System.out.println("DVD: " + judul + " | Sutradara: " + sutradara + " | Durasi: " + durasi + " menit");
-        //System.out.println("Status: " + (statusDipinjam ? "Dipinjam" : "Tersedia"));
+    }
+
+    @Override
+    public String getGambarUrl() {
+        return gambarUrl;
+    }
+    
+    @Override
+    public String getItemType() {
+        return "dvd";
     }
 }

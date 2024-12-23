@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="model.Buku" %>
+<%@ page import="model.ItemPerpustakaan" %>
 <%@ page import="java.util.List" %>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Catalogue - Open Library</title>
+    <title>Search Results - Open Library</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -132,58 +132,56 @@
         <nav class="navbar">
             <a href="index.jsp" class="navbar-brand">Open Library</a>
             <ul class="navbar-nav">
-                <% Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-                   String username = (String) session.getAttribute("loggedInUser");
-                   if (isLoggedIn != null && isLoggedIn) { %>
+                <%
+                    Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+                    String username = (String) session.getAttribute("loggedInUser");
+                    if (isLoggedIn != null && isLoggedIn) {
+                %>
                     <li><a href="index.jsp">Home</a></li>
                     <li><a href="#">My Books</a></li>
                     <li><a href="${pageContext.request.contextPath}/catalogue">Catalogue</a></li>
                     <li><span class="username">Welcome, <%= username %></span></li>
                     <li><a href="logout" class="btn-logout">Logout</a></li>
-                <% } else { %>
+                <%
+                    } else {
+                %>
                     <li><a href="index.jsp">Home</a></li>
                     <li><a href="${pageContext.request.contextPath}/catalogue">Catalogue</a></li>
                     <li><a href="login.jsp" class="btn-login">Log In</a></li>
                     <li><a href="signup.jsp" class="btn-signup">Sign Up</a></li>
-                <% } %>
+                <%
+                    }
+                %>
             </ul>
         </nav>
     </header>
     
     <div class="content">
-        <h2>Catalogue</h2>
-        <!-- Search and Filter Form -->
-        <div class="search-bar">
-            <form action="searchCatalogue" method="get">
-                <input type="text" name="searchTerm" placeholder="Search by title...">
-                <select name="filterType">
-                    <option value="buku">Buku</option>
-                    <option value="dvd">DVD</option>
-                    <option value="majalah">Majalah</option>
-                    <option value="jurnal">Jurnal</option>
-                </select>
-                <button type="submit">Search</button>
-            </form>
-        </div>
+        <h2>Search Results</h2>
         
         <div class="book-list">
-            <% List<Buku> bukuList = (List<Buku>) request.getAttribute("bukuList");
-               if (bukuList != null) {
-                   for (Buku buku : bukuList) { %>
+            <%
+                List<ItemPerpustakaan> searchResults = (List<ItemPerpustakaan>) request.getAttribute("searchResults");
+                if (searchResults != null && !searchResults.isEmpty()) {
+                    for (ItemPerpustakaan item : searchResults) {
+            %>
             <div class="book-card">
-                <img src="<%= buku.getGambarUrl() %>" alt="<%= buku.getJudul() %>">
-                <h4><%= buku.getJudul() %></h4>
-                <p><%= buku.getPenulis() %></p>
-                <form action="borrowItem" method="post">
-                    <input type="hidden" name="idItem" value="<%= buku.getIdItem() %>">
-                    <input type="hidden" name="itemType" value="buku">
+                <img src="<%= item.getGambarUrl() %>" alt="<%= item.getJudul() %>">
+                <h4><%= item.getJudul() %></h4>
+                <form action="<%= request.getContextPath() %>/borrowItem" method="post">
+                    <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
+                    <input type="hidden" name="itemType" value="<%= item.getItemType() %>">
                     <button type="submit">Borrow Now</button>
                 </form>
             </div>
-            <%   }
-               } else { %>
-            <p>No books available.</p>
-            <% } %>
+            <%
+                    }
+                } else {
+            %>
+            <p>No items found.</p>
+            <%
+                }
+            %>
         </div>
     </div>
 </body>

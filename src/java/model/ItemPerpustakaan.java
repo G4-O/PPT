@@ -61,6 +61,8 @@ public abstract class ItemPerpustakaan {
     }
     
     public abstract void tampilkanInfo();
+    
+    public abstract String getGambarUrl(); // Add this abstract method
 
     public String getJudul() {
         return judul;
@@ -77,4 +79,6 @@ public abstract class ItemPerpustakaan {
     public void setIdItem(String idItem) {
         this.idItem = idItem;
     }
+    
+    public abstract String getItemType();
 }

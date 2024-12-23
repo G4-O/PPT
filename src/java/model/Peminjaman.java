@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author Belacks
- */
 public class Peminjaman extends Transaksi {
     private long tanggalKembali;
 
@@ -27,5 +19,9 @@ public class Peminjaman extends Transaksi {
 
     public long getTanggalKembali() {
         return tanggalKembali;
+    }
+
+    public ItemPerpustakaan getItem() {
+        return item;
     }
 }

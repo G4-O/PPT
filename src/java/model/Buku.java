@@ -28,6 +28,8 @@ public class Buku extends ItemPerpustakaan {
         return penulis;
     }
 
+    
+    @Override
     public String getGambarUrl() {
         return gambarUrl;
     }
@@ -35,5 +37,10 @@ public class Buku extends ItemPerpustakaan {
     @Override
     public void tampilkanInfo() {
         System.out.println("Buku: " + judul + " | Penulis: " + penulis + " | Tahun: " + tahunTerbit);
+    }
+    
+    @Override
+    public String getItemType() {
+        return "buku";
     }
 }
