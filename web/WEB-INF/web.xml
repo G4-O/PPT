@@ -5,20 +5,12 @@
         <servlet-class>controller.CatalogController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>LoginController</servlet-name>
-        <servlet-class>controller.LoginController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ReservationController</servlet-name>
         <servlet-class>controller.ReservationController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CatalogController</servlet-name>
         <url-pattern>/CatalogController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>LoginController</servlet-name>
-        <url-pattern>/LoginController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ReservationController</servlet-name>
@@ -30,3 +22,4 @@
         </session-timeout>
     </session-config>
 </web-app>
+

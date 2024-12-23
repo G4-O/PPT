@@ -1,21 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author Belacks
- */
 public class Buku extends ItemPerpustakaan {
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private String penulis;
     private int tahunTerbit;
+    private String gambarUrl; // URL gambar
 
-    public Buku(String judul, String idItem, String penulis, int tahunTerbit) {
+    public Buku(String judul, String idItem, String penulis, int tahunTerbit, String gambarUrl) {
         super(judul, idItem);
         this.penulis = penulis;
         this.tahunTerbit = tahunTerbit;
+        this.gambarUrl = gambarUrl;
     }
 
     public int getTahunTerbit() {
@@ -26,9 +28,19 @@ public class Buku extends ItemPerpustakaan {
         return penulis;
     }
 
+    
+    @Override
+    public String getGambarUrl() {
+        return gambarUrl;
+    }
+
     @Override
     public void tampilkanInfo() {
         System.out.println("Buku: " + judul + " | Penulis: " + penulis + " | Tahun: " + tahunTerbit);
-        //System.out.println("Status: " + (statusDipinjam() ? "Dipinjam" : "Tersedia"));
+    }
+    
+    @Override
+    public String getItemType() {
+        return "buku";
     }
 }
