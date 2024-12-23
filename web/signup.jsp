@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -55,13 +56,24 @@
         .container .home-link:hover {
             text-decoration: underline;
         }
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Sign Up for Open Library</h2>
-        <!-- Form to submit user information to signupProcess.jsp -->
-        <form action="signupProcess.jsp" method="post">
+        
+        <!-- Display error message if present -->
+        <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+        <% if (errorMessage != null) { %>
+            <div class="error-message"><%= errorMessage %></div>
+        <% } %>
+        
+        <!-- Form to submit user information to SignupServlet -->
+        <form action="signup" method="post">
             <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>

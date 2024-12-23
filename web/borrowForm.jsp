@@ -1,10 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="model.Buku" %>
-<%@ page import="java.util.List" %>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Catalogue - Open Library</title>
+    <title>Borrow Item - Open Library</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,41 +52,8 @@
             max-width: 1200px;
             margin: 30px auto;
             padding: 0 20px;
-        }
-        .search-bar {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .search-bar input[type="text"] {
-            width: 300px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .search-bar button {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-left: 10px;
-            border-radius: 4px;
-        }
-        .search-bar button:hover {
-            background-color: #0056b3;
-        }
-        .search-bar select {
-            margin-left: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .book-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            align-items: flex-start;
         }
         .book-card {
             width: 180px;
@@ -97,7 +62,7 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-right: 20px;
         }
         .book-card img {
             width: 120px;
@@ -112,17 +77,29 @@
             font-size: 14px;
             color: #666;
         }
-        .book-card button {
-            margin-top: 10px;
+        form {
+            flex-grow: 1;
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        form input[type="text"], form input[type="number"] {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        form button {
             background-color: #007bff;
             color: #fff;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 4px;
-            font-size: 14px;
             cursor: pointer;
         }
-        .book-card button:hover {
+        form button:hover {
             background-color: #0056b3;
         }
     </style>
@@ -149,42 +126,30 @@
             </ul>
         </nav>
     </header>
-    
+
     <div class="content">
-        <h2>Catalogue</h2>
-        <!-- Search and Filter Form -->
-        <div class="search-bar">
-            <form action="searchCatalogue" method="get">
-                <input type="text" name="searchTerm" placeholder="Search by title...">
-                <select name="filterType">
-                    <option value="buku">Buku</option>
-                    <option value="dvd">DVD</option>
-                    <option value="majalah">Majalah</option>
-                    <option value="jurnal">Jurnal</option>
-                </select>
-                <button type="submit">Search</button>
-            </form>
+        <!-- Display Book Information -->
+        <div class="book-card">
+            <img src="<%= request.getAttribute("gambarUrl") %>" alt="<%= request.getAttribute("judul") %>">
+            <h4><%= request.getAttribute("judul") %></h4>
+            <p><%= request.getAttribute("penulis") %></p>
         </div>
-        
-        <div class="book-list">
-            <% List<Buku> bukuList = (List<Buku>) request.getAttribute("bukuList");
-               if (bukuList != null) {
-                   for (Buku buku : bukuList) { %>
-            <div class="book-card">
-                <img src="<%= buku.getGambarUrl() %>" alt="<%= buku.getJudul() %>">
-                <h4><%= buku.getJudul() %></h4>
-                <p><%= buku.getPenulis() %></p>
-                <form action="borrowItem" method="post">
-                    <input type="hidden" name="idItem" value="<%= buku.getIdItem() %>">
-                    <input type="hidden" name="itemType" value="buku">
-                    <button type="submit">Borrow Now</button>
-                </form>
-            </div>
-            <%   }
-               } else { %>
-            <p>No books available.</p>
-            <% } %>
-        </div>
+
+        <!-- Borrow Form -->
+        <form action="<%= request.getContextPath() %>/processBorrow" method="post">
+            <input type="hidden" name="idItem" value="${idItem}">
+            <c:if test="${empty nama}">
+                <label for="nama">Nama:</label>
+                <input type="text" name="nama" required>
+            </c:if>
+            <c:if test="${not empty nama}">
+                <p>Nama: ${nama}</p>
+                <input type="hidden" name="nama" value="${nama}">
+            </c:if>
+            <label for="durasiPinjam">Durasi Peminjaman (hari):</label>
+            <input type="number" name="durasiPinjam" required>
+            <button type="submit">Confirm Borrow</button>
+        </form>
     </div>
 </body>
 </html>

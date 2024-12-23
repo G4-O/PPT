@@ -1,8 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.ItemPerpustakaan" %>
+<%@ page import="java.util.List" %>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Open Library</title>
+    <title>Search Results - Open Library</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,39 +50,10 @@
         .navbar-nav a:hover {
             color: #d9d9d9;
         }
-        
-        .btn-login {
-            background-color: green;
-            padding: 5px 7px 5px 7px;
-            border-radius: 8px;
-        }
-        
-        .btn-signup {
-            background-color: blueviolet;
-            padding: 5px 7px 5px 7px;
-            border-radius: 8px;
-        }
-
-        .btn-logout {
-            background-color: #dc3545;
-            padding: 5px 7px 5px 7px;
-            border-radius: 8px;
-        }
-
-        .btn-logout:hover {
-            background-color: #c82333;
-        }
-
-        .username {
-            color: #fff;
-            margin-right: 15px;
-        }
-        
         .content {
             max-width: 1200px;
             margin: 30px auto;
             padding: 0 20px;
-            text-align: center;
         }
         .search-bar {
             display: flex;
@@ -106,38 +79,13 @@
         .search-bar button:hover {
             background-color: #0056b3;
         }
-        .search-bar .advanced-search {
-            margin-left: 20px;
-            color: #007bff;
-            cursor: pointer;
+        .search-bar select {
+            margin-left: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        .search-bar .advanced-search:hover {
-            text-decoration: underline;
-        }
-        .feature-box {
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .feature-box img {
-            width: 50px;
-            height: 50px;
-            margin-right: 20px;
-        }
-        .feature-box h3 {
-            margin: 0;
-            font-size: 18px;
-        }
-        .feature-box p {
-            margin: 5px 0 0 0;
-            font-size: 14px;
-            color: #666;
-        }
-        .trending-books {
+        .book-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
@@ -182,13 +130,14 @@
 <body>
     <header>
         <nav class="navbar">
-            <a href="#" class="navbar-brand">Open Library</a>
+            <a href="index.jsp" class="navbar-brand">Open Library</a>
             <ul class="navbar-nav">
                 <%
                     Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
                     String username = (String) session.getAttribute("loggedInUser");
                     if (isLoggedIn != null && isLoggedIn) {
                 %>
+                    <li><a href="index.jsp">Home</a></li>
                     <li><a href="#">My Books</a></li>
                     <li><a href="${pageContext.request.contextPath}/catalogue">Catalogue</a></li>
                     <li><span class="username">Welcome, <%= username %></span></li>
@@ -196,7 +145,7 @@
                 <%
                     } else {
                 %>
-                    <li><a href="#">My Books</a></li>
+                    <li><a href="index.jsp">Home</a></li>
                     <li><a href="${pageContext.request.contextPath}/catalogue">Catalogue</a></li>
                     <li><a href="login.jsp" class="btn-login">Log In</a></li>
                     <li><a href="signup.jsp" class="btn-signup">Sign Up</a></li>
@@ -208,68 +157,31 @@
     </header>
     
     <div class="content">
-        <h2>Welcome to Open Library</h2>
+        <h2>Search Results</h2>
         
-        <div class="search-bar">
-            <input type="text" placeholder="Search for books...">
-            <button><i class="fas fa-search"></i> Search</button>
-            <span class="advanced-search">Advanced Search</span>
-        </div>
-        
-        <div class="feature-box">
-            <img src="book.png" alt="Read Free Library Books Online">
-            <div>
-                <h3>Read Free Library Books Online</h3>
-                <p>Millions of books available through Controlled Digital Lending</p>
-            </div>
-        </div>
-        
-        <div class="feature-box">
-            <img src="goal.png" alt="Set a Yearly Reading Goal">
-            <div>
-                <h3>Set a Yearly Reading Goal</h3>
-                <p>Learn how to set a yearly reading goal and track what you read</p>
-            </div>
-        </div>
-        
-        <div class="feature-box">
-            <img src="books.png" alt="Keep Track of your Favorite Books">
-            <div>
-                <h3>Keep Track of your Favorite Books</h3>
-                <p>Organize your Books using Lists & the Reading Log</p>
-            </div>
-        </div>
-        
-        <h2>Trending Books</h2>
-        
-        <div class="trending-books">
+        <div class="book-list">
+            <%
+                List<ItemPerpustakaan> searchResults = (List<ItemPerpustakaan>) request.getAttribute("searchResults");
+                if (searchResults != null && !searchResults.isEmpty()) {
+                    for (ItemPerpustakaan item : searchResults) {
+            %>
             <div class="book-card">
-                <img src="control-your-mind.jpg" alt="Control Your Mind and Master Your Feelings">
-                <h4>Control Your Mind and Master Your Feelings</h4>
-                <p>Eric Robertson</p>
-                <button>Read</button>
+                <img src="<%= item.getGambarUrl() %>" alt="<%= item.getJudul() %>">
+                <h4><%= item.getJudul() %></h4>
+                <form action="<%= request.getContextPath() %>/borrowItem" method="post">
+                    <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
+                    <input type="hidden" name="itemType" value="<%= item.getItemType() %>">
+                    <button type="submit">Borrow Now</button>
+                </form>
             </div>
-            
-            <div class="book-card">
-                <img src="book2.jpg" alt="The Great Gatsby">
-                <h4>The Great Gatsby</h4>
-                <p>F. Scott Fitzgerald</p>
-                <button>Read</button>
-            </div>
-
-            <div class="book-card">
-                <img src="book3.jpg" alt="To Kill a Mockingbird">
-                <h4>To Kill a Mockingbird</h4>
-                <p>Harper Lee</p>
-                <button>Read</button>
-            </div>
-
-            <div class="book-card">
-                <img src="book4.jpg" alt="1984">
-                <h4>1984</h4>
-                <p>George Orwell</p>
-                <button>Read</button>
-            </div>
+            <%
+                    }
+                } else {
+            %>
+            <p>No items found.</p>
+            <%
+                }
+            %>
         </div>
     </div>
 </body>

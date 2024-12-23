@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -49,7 +50,6 @@
             color: #007bff;
             text-decoration: none;
         }
-        
         .container .home-link {
             margin-top: 20px;
             display: block;
@@ -59,12 +59,23 @@
         .container .signup-link:hover {
             text-decoration: underline;
         }
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Login to Open Library</h2>
-        <form action="loginProcess.jsp" method="post">
+        
+        <!-- Display error message if present -->
+        <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+        <% if (errorMessage != null) { %>
+            <div class="error-message"><%= errorMessage %></div>
+        <% } %>
+        
+        <form action="login" method="post">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>

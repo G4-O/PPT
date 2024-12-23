@@ -1,24 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author Belacks
- */
 public class Majalah extends ItemPerpustakaan {
     private int edisi;
+    private String gambarUrl;
 
-    public Majalah(String judul, String idItem, int edisi) {
+    public Majalah(String judul, String idItem, int edisi, String gambarUrl) {
         super(judul, idItem);
         this.edisi = edisi;
+        this.gambarUrl = gambarUrl;
     }
 
     @Override
     public void tampilkanInfo() {
         System.out.println("Majalah: " + judul + " | Edisi: " + edisi);
-        //System.out.println("Status: " + (statusDipinjam ? "Dipinjam" : "Tersedia"));
+    }
+
+    @Override
+    public String getGambarUrl() {
+        return gambarUrl;
+    }
+    
+    @Override
+    public String getItemType() {
+        return "majalah";
     }
 }
