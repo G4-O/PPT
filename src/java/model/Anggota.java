@@ -2,6 +2,48 @@ package model;
 
 import java.util.List;
 
+
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+// DEPRECATED
+
 public class Anggota implements ManajemenPeminjaman {
     protected String nama;
     protected String idAnggota;
@@ -15,7 +57,7 @@ public class Anggota implements ManajemenPeminjaman {
     public void pinjamItem(ItemPerpustakaan item, long durasiPinjam, List<Peminjaman> peminjamanList) {
         long unixTime = System.currentTimeMillis() / 1000L;
         if (item.isAvailable(peminjamanList)) {
-            item.pinjamItem(peminjamanList, this, unixTime + durasiPinjam);
+            //item.pinjamItem(peminjamanList, this, unixTime + durasiPinjam);
             System.out.println(nama + " meminjam " + item.judul + " selama " + (durasiPinjam / (3600 * 24)) + " hari");
         } else {
             System.out.println("Item tidak tersedia.");
