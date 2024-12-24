@@ -9,7 +9,7 @@ package model;
  *
  * @author Belacks
  */
-public class AnggotaKaryawan extends Anggota {
+public class AnggotaKaryawan extends User {
      public AnggotaKaryawan(String nama, String idAnggota) {
         super(nama, idAnggota);
     }

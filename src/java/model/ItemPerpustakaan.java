@@ -34,13 +34,13 @@ public abstract class ItemPerpustakaan {
     
     
     // Metode untuk melakukan reservasi
-    public void pinjamItem(List<Peminjaman> lp, Anggota anggota, long deadline) {
+    public void pinjamItem(List<Peminjaman> lp, User user, long deadline) {
         long unixTime = System.currentTimeMillis() / 1000L;
         if (!statusDipinjam(lp)) {
             UUID uuid = UUID.randomUUID();
             String uuidAsString = uuid.toString();
 
-            lp.add(new Peminjaman(uuidAsString, this, anggota, unixTime, deadline));
+            lp.add(new Peminjaman(uuidAsString, this, user, unixTime, deadline));
             System.out.println(judul + " telah berhasil direservasi.");
         } else {
             System.out.println("Item ini tidak dapat direservasi saat ini.");

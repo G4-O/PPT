@@ -11,8 +11,8 @@ package model;
 public class Pengembalian extends Transaksi {
     private int denda;
 
-    public Pengembalian(String idTransaksi, ItemPerpustakaan item, Anggota anggota, long tanggalTransaksi, int denda) {
-        super(idTransaksi, item, anggota, tanggalTransaksi);
+    public Pengembalian(String idTransaksi, ItemPerpustakaan item, User user, long tanggalTransaksi, int denda) {
+        super(idTransaksi, item, user, tanggalTransaksi);
         this.denda = denda;
     }
 
@@ -20,7 +20,7 @@ public class Pengembalian extends Transaksi {
     public void detailTransaksi() {
         System.out.println("Pengembalian ID: " + idTransaksi);
         System.out.println("Item: " + item.judul);
-        System.out.println("Anggota: " + anggota.nama);
+        System.out.println("Anggota: " + user.getNama());
         System.out.println("Tanggal Pengembalian: " + tanggalTransaksi);
         System.out.println("Denda: " + denda);
     }
