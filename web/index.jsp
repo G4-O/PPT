@@ -70,7 +70,7 @@
             gap: 24px;
             align-items: center;
             list-style: none;
-            margin: 0;
+            margin: 0px 25px 0px 25px;
             padding: 0;
         }
 
@@ -79,7 +79,9 @@
             text-decoration: none;
             font-weight: 500;
             padding: 8px 16px;
+            margin: 0px 15px 0px -15px;
             border-radius: 8px;
+            align-items: center;
             transition: all 0.3s ease;
         }
 
@@ -607,24 +609,24 @@
 
     <section class="categories">
         <div class="category-card">
-            <i class="fas fa-magic category-icon"></i>
-            <h3>Fantasy</h3>
-            <p>Explore magical worlds</p>
+            <i class="fa-solid fa-book fa-2xl"></i>
+            <h3>Books</h3>
+            <p>Explore all genres of books</p>
         </div>
         <div class="category-card">
-            <i class="fas fa-rocket category-icon"></i>
-            <h3>Sci-Fi</h3>
-            <p>Journey to the future</p>
+            <i class="fa-solid fa-compact-disc fa-2xl"></i>
+            <h3>DVD</h3>
+            <p>Movies, musics, softwares, and more</p>
         </div>
         <div class="category-card">
-            <i class="fas fa-heart category-icon"></i>
-            <h3>Romance</h3>
-            <p>Fall in love with stories</p>
+            <i class="fa-solid fa-book-open fa-2xl"></i>
+            <h3>Magazine</h3>
+            <p>Get the most popular magazines here</p>
         </div>
         <div class="category-card">
-            <i class="fas fa-mask category-icon"></i>
-            <h3>Mystery</h3>
-            <p>Solve intriguing cases</p>
+            <i class="fa-solid fa-copy fa-2xl"></i>
+            <h3>Journal</h3>
+            <p>Center of high credible source</p>
         </div>
     </section>
 
