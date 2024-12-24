@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 
 
@@ -18,6 +19,7 @@ public class User {
     }
     
     private String username;
+    private String nama;
     private String email;
     private String password;
     private int idUser;  // Tambahkan properti idUser
@@ -30,7 +32,7 @@ public class User {
     // Constructors
     public User() {}
 
-    public User(String username, String email, String password) {
+    public User(String username, String nama, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -48,6 +50,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
     }
 
     public String getEmail() {
@@ -119,5 +129,26 @@ public class User {
             e.printStackTrace();
             return false;
         }
+    }
+    
+    
+    public void pinjamItem(ItemPerpustakaan item, long durasiPinjam, List<Peminjaman> peminjamanList) {
+        long unixTime = System.currentTimeMillis() / 1000L;
+        if (item.isAvailable(peminjamanList)) {
+            item.pinjamItem(peminjamanList, this, unixTime + durasiPinjam);
+            System.out.println(nama + " meminjam " + item.judul + " selama " + (durasiPinjam / (3600 * 24)) + " hari");
+        } else {
+            System.out.println("Item tidak tersedia.");
+        }
+    }
+
+    public void kembalikanItem(ItemPerpustakaan item, List<Peminjaman> peminjamanList) {
+        item.batalkanPeminjaman(item.idItem, peminjamanList);
+        System.out.println(nama + " mengembalikan " + item.judul);
+    }
+
+    public void tampilkanInfo() {
+        System.out.println("email: " + this.email);
+        System.out.println("Nama: " + this.nama);
     }
 }

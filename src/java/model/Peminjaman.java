@@ -3,8 +3,8 @@ package model;
 public class Peminjaman extends Transaksi {
     private long tanggalKembali;
 
-    public Peminjaman(String idTransaksi, ItemPerpustakaan item, Anggota anggota, long tanggalTransaksi, long tanggalKembali) {
-        super(idTransaksi, item, anggota, tanggalTransaksi);
+    public Peminjaman(String idTransaksi, ItemPerpustakaan item, User user, long tanggalTransaksi, long tanggalKembali) {
+        super(idTransaksi, item, user, tanggalTransaksi);
         this.tanggalKembali = tanggalKembali;
     }
 
@@ -12,7 +12,7 @@ public class Peminjaman extends Transaksi {
     public void detailTransaksi() {
         System.out.println("Peminjaman ID: " + idTransaksi);
         System.out.println("Item: " + item.judul);
-        System.out.println("Anggota: " + anggota.nama);
+        System.out.println("Anggota: " + user.getNama());
         System.out.println("Tanggal Peminjaman: " + tanggalTransaksi);
         System.out.println("Tanggal Kembali: " + tanggalKembali);
     }

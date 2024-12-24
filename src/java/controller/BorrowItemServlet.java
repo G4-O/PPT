@@ -41,7 +41,7 @@ public class BorrowItemServlet extends HttpServlet {
             }
 
             // Ambil nama anggota jika ada
-            String query = "SELECT nama FROM anggota WHERE idUser = ?";
+            String query = "SELECT nama FROM users WHERE idUser = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, idUser);
                 ResultSet rs = stmt.executeQuery();
