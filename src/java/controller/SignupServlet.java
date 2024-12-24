@@ -13,6 +13,7 @@ import java.io.IOException;
 public class SignupServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
+        String nama = request.getParameter("nama");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm_password");
@@ -32,7 +33,7 @@ public class SignupServlet extends HttpServlet {
             return;
         }
 
-        User user = new User(username, email, password);
+        User user = new User(username, nama, email, password);
         if (user.save()) {
             response.sendRedirect("login.jsp");
         } else {
