@@ -10,8 +10,8 @@
     <style>
         /* Global Styles */
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1d4ed8;
+            --primary-color: #1e3c72;
+            --secondary-color: #2a5298;
             --accent-color: #3b82f6;
             --background-color: #f8fafc;
             --text-color: #1e293b;
@@ -79,7 +79,7 @@
             text-decoration: none;
             font-weight: 500;
             padding: 8px 16px;
-            margin: 0px 15px 0px -15px;
+            margin: 0px 10px 0px -10px;
             border-radius: 8px;
             align-items: center;
             transition: all 0.3s ease;
@@ -106,12 +106,13 @@
         }
 
         .btn-primary {
-            background-color: #3b82f6;
+            margin-left: 24px;
+            background-color: #435f91;
             color: white;
         }
 
         .btn-primary:hover {
-            background-color: #2563eb;
+            background-color: #4c628a;
             transform: translateY(-2px);
             box-shadow: 0 4px 6px -1px rgb(59 130 246 / 0.5);
         }
@@ -571,14 +572,14 @@
                 String username = (String) session.getAttribute("loggedInUser");
                 if (isLoggedIn != null && isLoggedIn) {
                 %>
-                    <li><a href="#" class="nav-link"><i class="fas fa-books"></i> My Books</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-book"></i> My Books</a></li>
                     <li><a href="<%= request.getContextPath() %>/catalogue" class="nav-link"><i class="fas fa-compass"></i> Explore</a></li>
-                    <li><span class="username">Welcome, <%= username %></span></li>
+                    <li><span style="color: white;"><i class="fas fa-user"></i> <%= username %></span></li>
                     <li><a href="logout" class="btn btn-primary">Logout</a></li>
                 <%
                 } else {
                 %>
-                    <li><a href="#" class="nav-link"><i class="fas fa-books"></i> My Books</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-book"></i> My Books</a></li>
                     <li><a href="<%= request.getContextPath() %>/catalogue" class="nav-link"><i class="fas fa-compass"></i> Explore</a></li>
                     <li><a href="login.jsp" class="btn btn-primary">Log In</a></li>
                     <li><a href="signup.jsp" class="btn btn-secondary">Sign Up</a></li>
