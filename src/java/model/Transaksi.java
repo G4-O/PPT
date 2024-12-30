@@ -11,13 +11,13 @@ package model;
 public abstract class Transaksi {
     protected String idTransaksi;
     protected ItemPerpustakaan item;
-    protected Anggota anggota;
+    protected User user;
     protected long tanggalTransaksi;
 
-    public Transaksi(String idTransaksi, ItemPerpustakaan item, Anggota anggota, long tanggalTransaksi) {
+    public Transaksi(String idTransaksi, ItemPerpustakaan item, User user, long tanggalTransaksi) {
         this.idTransaksi = idTransaksi;
         this.item = item;
-        this.anggota = anggota;
+        this.user = user;
         this.tanggalTransaksi = tanggalTransaksi;
     }
 

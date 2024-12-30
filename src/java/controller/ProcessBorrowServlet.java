@@ -15,13 +15,40 @@ public class ProcessBorrowServlet extends HttpServlet {
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "";
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer idUserObj = (Integer) request.getSession().getAttribute("idUser");
+        String nama = null;
+        String idAnggota = null;
+
+        if (idUserObj != null) {
+            try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
+                String selectUser = "SELECT nama, idAnggota FROM users WHERE id = ?";
+                try (PreparedStatement selectStmt = connection.prepareStatement(selectUser)) {
+                    selectStmt.setInt(1, idUserObj);
+                    ResultSet rs = selectStmt.executeQuery();
+
+                    if (rs.next()) {
+                        nama = rs.getString("nama");
+                        idAnggota = rs.getString("idAnggota");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        request.setAttribute("nama", nama);
+        request.setAttribute("idAnggota", idAnggota);
+        request.getRequestDispatcher("borrowForm.jsp").forward(request, response);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idItem = request.getParameter("idItem");
         String durasiPinjamStr = request.getParameter("durasiPinjam");
-        Integer idUser = (Integer) request.getSession().getAttribute("idUser"); // Retrieve as Integer
+        Integer idUserObj = (Integer) request.getSession().getAttribute("idUser");
         String nama = request.getParameter("nama");
 
-        if (idUser == null) {
+        if (idUserObj == null) {
             response.sendRedirect("login.jsp");
             return;
         }
@@ -42,49 +69,59 @@ public class ProcessBorrowServlet extends HttpServlet {
         }
 
         long unixTime = System.currentTimeMillis() / 1000L;
-        String idAnggota = UUID.randomUUID().toString();
+        String idTransaksi = UUID.randomUUID().toString();
 
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
-            // Check if anggota exists
-            String checkUserQuery = "SELECT * FROM anggota WHERE idUser = ?";
-            try (PreparedStatement checkStmt = connection.prepareStatement(checkUserQuery)) {
-                checkStmt.setInt(1, idUser); // Use setInt for Integer
-                ResultSet resultSet = checkStmt.executeQuery();
+            connection.setAutoCommit(false); // Start transaction
 
-                if (!resultSet.next()) {
-                    // Insert anggota if not exists
-                    String insertAnggota = "INSERT INTO anggota (idAnggota, nama, idUser) VALUES (?, ?, ?)";
-                    try (PreparedStatement insertStmt = connection.prepareStatement(insertAnggota)) {
-                        insertStmt.setString(1, idAnggota);
-                        insertStmt.setString(2, nama);
-                        insertStmt.setInt(3, idUser); // Use setInt for Integer
-                        insertStmt.executeUpdate();
-                    }
-                } else {
-                    idAnggota = resultSet.getString("idAnggota");
+            String selectUser = "SELECT nama, idAnggota FROM users WHERE id = ?";
+            String currentNama = null;
+            String currentIdAnggota = null;
+            try (PreparedStatement selectStmt = connection.prepareStatement(selectUser)) {
+                selectStmt.setInt(1, idUserObj);
+                ResultSet rs = selectStmt.executeQuery();
+                if (rs.next()) {
+                    currentNama = rs.getString("nama");
+                    currentIdAnggota = rs.getString("idAnggota");
                 }
-
-                // Insert peminjaman
-                String idTransaksi = UUID.randomUUID().toString();
-                long tanggalKembali = unixTime + durasiPinjam;
-
-                String insertPeminjaman = "INSERT INTO peminjaman (idTransaksi, idItem, idAnggota, tanggalTransaksi, tanggalKembali) VALUES (?, ?, ?, ?, ?)";
-                try (PreparedStatement insertStmt = connection.prepareStatement(insertPeminjaman)) {
-                    insertStmt.setString(1, idTransaksi);
-                    insertStmt.setString(2, idItem);
-                    insertStmt.setString(3, idAnggota);
-                    insertStmt.setLong(4, unixTime);
-                    insertStmt.setLong(5, tanggalKembali);
-                    insertStmt.executeUpdate();
-                }
-
-                request.setAttribute("message", "Item borrowed successfully.");
             }
+
+            // Update `nama` and generate `idAnggota` if necessary
+            if (currentNama == null || currentNama.isEmpty()) {
+                if (currentIdAnggota == null || currentIdAnggota.isEmpty()) {
+                    currentIdAnggota = UUID.randomUUID().toString();
+                }
+                String updateUser = "UPDATE users SET nama = ?, idAnggota = ? WHERE id = ?";
+                try (PreparedStatement updateStmt = connection.prepareStatement(updateUser)) {
+                    updateStmt.setString(1, nama);
+                    updateStmt.setString(2, currentIdAnggota);
+                    updateStmt.setInt(3, idUserObj);
+                    updateStmt.executeUpdate();
+                }
+            }
+
+            // Insert peminjaman record
+            String insertPeminjaman = "INSERT INTO peminjaman (idTransaksi, idItem, idAnggota, tanggalTransaksi, tanggalKembali) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement insertStmt = connection.prepareStatement(insertPeminjaman)) {
+                insertStmt.setString(1, idTransaksi);
+                insertStmt.setString(2, idItem);
+                insertStmt.setString(3, currentIdAnggota);
+                insertStmt.setLong(4, unixTime);
+                insertStmt.setLong(5, unixTime + durasiPinjam);
+                insertStmt.executeUpdate();
+            }
+
+            connection.commit(); // Commit transaction
+
+            request.setAttribute("message", "Item borrowed successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            request.setAttribute("message", "An error occurred while processing your request.");
+            request.setAttribute("message", "An error occurred while processing your request. Error: " + e.getMessage());
         }
 
         request.getRequestDispatcher("confirmation.jsp").forward(request, response);
     }
 }
+
+
+

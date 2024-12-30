@@ -1,4 +1,3 @@
-// LoginServlet.java
 package controller;
 
 import model.User;
@@ -18,16 +17,18 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        // Assume User class has authenticate method that validates credentials
         User user = new User(username, password);
         if (user.authenticate()) {
-            // Simpan data user ke session
+            // Store user data in session
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", username);
             session.setAttribute("isLoggedIn", true);
-            session.setAttribute("idUser", user.getIdUser()); // Simpan sebagai Integer
+            session.setAttribute("idUser", user.getIdUser()); // Ensure this is correctly retrieved as Integer
             
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("index.jsp"); // Redirect to home or dashboard
         } else {
+            // Set error message and forward back to login page
             request.setAttribute("errorMessage", "Invalid username or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }

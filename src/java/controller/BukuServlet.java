@@ -1,6 +1,8 @@
 package controller;
 
 import model.Buku;
+import model.User;
+import model.Peminjaman;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,36 +15,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 // BukuServlet.java
-@WebServlet(name = "BukuServlet", urlPatterns = {"/catalogue"})  // Lebih lengkap
+@WebServlet(name = "BukuServlet", urlPatterns = {"/catalogue"})
 public class BukuServlet extends HttpServlet {
-    // Konfigurasi database
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/perpustakaan_db";
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "";
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
         List<Buku> bukuList = new ArrayList<>();
-
+        List<Peminjaman> peminjamanList = new ArrayList<>();
+        
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
-            String sql = "SELECT idItem, judul, penulis, tahunTerbit, gambarUrl FROM buku LIMIT 10";
+            // Get books
+            String sqlBuku = "SELECT idItem, judul, penulis, tahunTerbit, gambarUrl FROM buku LIMIT 10";
             try (Statement statement = connection.createStatement()) {
-                ResultSet resultSet = statement.executeQuery(sql);
+                ResultSet resultSet = statement.executeQuery(sqlBuku);
                 while (resultSet.next()) {
                     String idItem = resultSet.getString("idItem");
                     String judul = resultSet.getString("judul");
                     String penulis = resultSet.getString("penulis");
                     int tahunTerbit = resultSet.getInt("tahunTerbit");
                     String gambarUrl = resultSet.getString("gambarUrl");
-
                     bukuList.add(new Buku(judul, idItem, penulis, tahunTerbit, gambarUrl));
+                }
+            }
+            
+            // Get active loans
+            String sqlPeminjaman = "SELECT * FROM peminjaman WHERE tanggalKembali > ?";
+            try (PreparedStatement pstmt = connection.prepareStatement(sqlPeminjaman)) {
+                long currentTime = System.currentTimeMillis() / 1000L;
+                pstmt.setLong(1, currentTime);
+                ResultSet resultSet = pstmt.executeQuery();
+                while (resultSet.next()) {
+                    // Sesuaikan dengan struktur tabel peminjaman Anda
+                    String idTransaksi = resultSet.getString("idTransaksi");
+                    String idItem = resultSet.getString("idItem");
+                    String userId = resultSet.getString("userId");
+                    long tanggalPinjam = resultSet.getLong("tanggalPinjam");
+                    long tanggalKembali = resultSet.getLong("tanggalKembali");
+                    
+                    // Find the corresponding book
+                    for (Buku buku : bukuList) {
+                        if (buku.getIdItem().equals(idItem)) {
+                            // Create User object (implement according to your User class)
+                            User user = new User(userId, ""); // Add other user details as needed
+                            peminjamanList.add(new Peminjaman(idTransaksi, buku, user, tanggalPinjam, tanggalKembali));
+                            break;
+                        }
+                    }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        request.setAttribute("bukuList", bukuList); // Set atribut
-        request.getRequestDispatcher("catalogue.jsp").forward(request, response); // Forward ke JSP
+        request.setAttribute("bukuList", bukuList);
+        request.setAttribute("peminjamanList", peminjamanList);
+        request.getRequestDispatcher("catalogue.jsp").forward(request, response);
     }
 }
-

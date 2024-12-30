@@ -25,7 +25,6 @@ public class BorrowItemServlet extends HttpServlet {
         }
 
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
-            // Ambil informasi item berdasarkan tipe
             String itemQuery = getItemQuery(itemType);
             if (itemQuery != null) {
                 try (PreparedStatement itemStmt = connection.prepareStatement(itemQuery)) {
@@ -40,15 +39,16 @@ public class BorrowItemServlet extends HttpServlet {
                 }
             }
 
-            // Ambil nama anggota jika ada
-            String query = "SELECT nama FROM anggota WHERE idUser = ?";
+            String query = "SELECT nama, idAnggota FROM users WHERE idUser = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, idUser);
                 ResultSet rs = stmt.executeQuery();
 
                 if (rs.next()) {
                     String nama = rs.getString("nama");
+                    String idAnggota = rs.getString("idAnggota");
                     request.setAttribute("nama", nama);
+                    request.setAttribute("idAnggota", idAnggota);
                 }
             }
         } catch (SQLException e) {
@@ -74,3 +74,4 @@ public class BorrowItemServlet extends HttpServlet {
         }
     }
 }
+
