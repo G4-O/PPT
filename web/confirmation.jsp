@@ -148,7 +148,7 @@
                    String username = (String) session.getAttribute("loggedInUser");
                    if (isLoggedIn != null && isLoggedIn) { %>
                     <li><a href="index.jsp" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-book"></i> My Books</a></li>
+                    <li><a href="<%= request.getContextPath() %>/mybooks" class="nav-link"><i class="fas fa-book"></i> My Books</a></li>
                     <li><a href="${pageContext.request.contextPath}/catalogue" class="nav-link"><i class="fas fa-compass"></i> Explore</a></li>
                     <li><span style="color: white;"><i class="fas fa-user"></i> <%= username %></span></li>
                     <li><a href="logout" class="btn-logout">Logout</a></li>
