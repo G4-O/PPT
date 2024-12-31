@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.Buku" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,50 +156,54 @@
 
         /* Enhanced Search Bar */
         .search-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 24px;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            animation: slideInUp 1s ease-out;
+            padding: 2rem;
+            width: 750px;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            margin: auto;
         }
 
-        .search-bar {
+        .search-form {
             display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .search-input {
             flex: 1;
-            padding: 16px 24px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            min-width: 200px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
         }
 
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.3);
+        .search-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            min-width: 150px;
         }
 
-        .search-btn {
-            padding: 16px 32px;
+        .search-button {
             background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .search-btn:hover {
+        .search-button:hover {
             background: var(--secondary-color);
-            transform: translateY(-2px);
         }
 
         /* Book Categories */
@@ -596,11 +602,19 @@
         
         <div class="search-container">
             <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Search by title, author, or ISBN...">
-                <button class="search-btn">
+                <form action="searchCatalogue" method="get" class="search-form">
+                <input type="text" name="searchTerm" class="search-input" placeholder="Search by title, author, or ISBN...">
+                <select name="filterType" class="search-select">
+                    <option value="buku">Books</option>
+                    <option value="dvd">DVDs</option>
+                    <option value="majalah">Magazines</option>
+                    <option value="jurnal">Journals</option>
+                </select>
+                <button type="submit" class="search-button">
                     <i class="fas fa-search"></i>
                     Search
                 </button>
+            </form>
             </div>
             <div class="advanced-filters" style="display: none;">
                 <!-- Advanced search filters will go here -->

@@ -13,6 +13,7 @@ public class BorrowedItem {
     private LocalDate returnDate;
     private long daysRemaining;
     private boolean isOverdue;
+    private boolean isDue;
     private long overdueDays;
 
     public BorrowedItem(String idItem, String title, String type, String authorOrDirector, 
@@ -30,8 +31,13 @@ public class BorrowedItem {
             this.daysRemaining = ChronoUnit.DAYS.between(today, returnDate);
             this.isOverdue = false;
             this.overdueDays = 0;
-        } else {
+        } else if (today.isEqual(returnDate)){
             this.daysRemaining = 0;
+            this.isOverdue = false;
+            this.isDue = true;
+            this.overdueDays = 0;
+        } else {
+            this.daysRemaining = 1;
             this.isOverdue = true;
             this.overdueDays = ChronoUnit.DAYS.between(returnDate, today);
         }
@@ -103,6 +109,10 @@ public class BorrowedItem {
     public boolean isOverdue() {
         return isOverdue;
     }
+    
+    public boolean isDue() {
+        return isDue;
+    }
 
     public long getOverdueDays() {
         return overdueDays;
@@ -115,8 +125,13 @@ public class BorrowedItem {
             this.daysRemaining = ChronoUnit.DAYS.between(today, returnDate);
             this.isOverdue = false;
             this.overdueDays = 0;
-        } else {
+        } else if (today.isEqual(returnDate)){
             this.daysRemaining = 0;
+            this.isOverdue = false;
+            this.isDue = true;
+            this.overdueDays = 0;
+        } else {
+            this.daysRemaining = 1;
             this.isOverdue = true;
             this.overdueDays = ChronoUnit.DAYS.between(returnDate, today);
         }
@@ -135,6 +150,7 @@ public class BorrowedItem {
                 ", returnDate=" + returnDate +
                 ", daysRemaining=" + daysRemaining +
                 ", isOverdue=" + isOverdue +
+                ", isDue=" + isDue +
                 ", overdueDays=" + overdueDays +
                 '}';
     }
