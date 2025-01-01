@@ -1,8 +1,5 @@
 package model;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-
 public class Peminjaman extends Transaksi {
     private long tanggalKembali;
 
@@ -26,21 +23,5 @@ public class Peminjaman extends Transaksi {
 
     public ItemPerpustakaan getItem() {
         return item;
-    }
-
-    // Method untuk menghitung status peminjaman
-    public String getStatusPeminjaman() {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate dueDate = LocalDate.ofEpochDay(tanggalKembali / (24 * 3600));
-
-        if (currentDate.isAfter(dueDate)) {
-            long overdueDays = currentDate.toEpochDay() - dueDate.toEpochDay();
-            return "Overdue by " + overdueDays + " days";
-        } else if (currentDate.isEqual(dueDate)) {
-            return "Due today, please return!";
-        } else {
-            long daysRemaining = dueDate.toEpochDay() - currentDate.toEpochDay();
-            return daysRemaining + " days remaining";
-        }
     }
 }

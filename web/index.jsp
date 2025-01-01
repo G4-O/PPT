@@ -1,10 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<<<<<<< HEAD
 <%@ page import="model.TrendingItem" %>
 <%@ page import="controller.TrendingController" %>
-=======
-<%@ page import="model.Buku" %>
->>>>>>> f08fdda033d80d6f996089d532a92bd562c829c0
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,59 +148,49 @@
         }
 
         .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px;
             background: white;
-<<<<<<< HEAD
             border-radius: 16px;
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-=======
-            padding: 2rem;
-            width: 750px;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1rem;
-            margin: auto;
->>>>>>> f08fdda033d80d6f996089d532a92bd562c829c0
         }
 
-        .search-form {
+        .search-bar {
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .search-input {
             flex: 1;
-            min-width: 200px;
-            padding: 0.75rem 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            font-size: 1rem;
+            padding: 16px 24px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
 
-        .search-select {
-            padding: 0.75rem 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            min-width: 150px;
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.3);
         }
 
-        .search-button {
+        .search-btn {
+            padding: 16px 32px;
             background: var(--primary-color);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            transition: all 0.3s ease;
         }
 
-        .search-button:hover {
+        .search-btn:hover {
             background: var(--secondary-color);
+            transform: translateY(-2px);
         }
 
         .categories {
@@ -459,33 +445,12 @@
         <h1>Discover Your Next Great Read</h1>
         <p>Access millions of eBooks, audiobooks, magazines, and more from your device.</p>
         <div class="search-container">
-<<<<<<< HEAD
             <form action="<%= request.getContextPath() %>/searchCatalogue" method="get" class="search-bar">
                 <input type="text" name="searchTerm" class="search-input" placeholder="Search by title">
                 <button type="submit" class="search-btn">
                     <i class="fas fa-search"></i> Search
                 </button>
             </form>
-=======
-            <div class="search-bar">
-                <form action="searchCatalogue" method="get" class="search-form">
-                <input type="text" name="searchTerm" class="search-input" placeholder="Search by title, author, or ISBN...">
-                <select name="filterType" class="search-select">
-                    <option value="buku">Books</option>
-                    <option value="dvd">DVDs</option>
-                    <option value="majalah">Magazines</option>
-                    <option value="jurnal">Journals</option>
-                </select>
-                <button type="submit" class="search-button">
-                    <i class="fas fa-search"></i>
-                    Search
-                </button>
-            </form>
-            </div>
-            <div class="advanced-filters" style="display: none;">
-                <!-- Advanced search filters will go here -->
-            </div>
->>>>>>> f08fdda033d80d6f996089d532a92bd562c829c0
         </div>
     </section>
 
