@@ -319,7 +319,11 @@
         <div class="book-card">
             <img src="<%= request.getAttribute("gambarUrl") %>" alt="<%= request.getAttribute("judul") %>" class="book-image">
             <h3><%= request.getAttribute("judul") %></h3>
-            <p class="author"><%= request.getAttribute("penulis") %></p>
+            <p class="author"><% if (request.getAttribute("type").equals("dvd")) { %>
+                        <%= request.getAttribute("sutradara") %>
+                    <% } else { %>
+                        <%= request.getAttribute("penulis") %>
+                    <% } %></p>
             <div class="stock-status <%= Integer.parseInt(request.getAttribute("stok").toString()) > 5 ? "in-stock" : "low-stock" %>">
                 <i class="fas fa-books"></i> 
                 <%= Integer.parseInt(request.getAttribute("stok").toString()) %> copies available
