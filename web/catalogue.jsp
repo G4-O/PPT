@@ -1,14 +1,29 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.ItemPerpustakaan" %>
 <%@ page import="model.Buku" %>
+<%@ page import="model.DVD" %>
+<%@ page import="model.Jurnal" %>
+<%@ page import="model.Majalah" %>
 <%@ page import="java.util.List" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue - Open Library</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
         :root {
             --primary-color: #1e3c72;
             --secondary-color: #2a5298;
@@ -33,7 +48,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .navbar {
@@ -72,7 +87,7 @@
             margin: 0px 25px 0px 25px;
             padding: 0;
         }
-        
+
         .nav-link {
             color: #fff;
             text-decoration: none;
@@ -88,17 +103,7 @@
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
-        
-        .navbar-nav li {
-            animation: fadeIn 0.5s ease-out forwards;
-            opacity: 0;
-        }
 
-        .navbar-nav li:nth-child(1) { animation-delay: 0.1s; }
-        .navbar-nav li:nth-child(2) { animation-delay: 0.2s; }
-        .navbar-nav li:nth-child(3) { animation-delay: 0.3s; }
-        .navbar-nav li:nth-child(4) { animation-delay: 0.4s; }
-    
         .btn {
             padding: 10px 20px;
             border-radius: 8px;
@@ -112,7 +117,7 @@
             align-items: center;
             gap: 8px;
         }
-    
+
         .btn-primary {
             margin-left: 24px;
             background-color: #435f91;
@@ -137,17 +142,19 @@
         }
 
         .content {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .search-container {
             background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin: 0 auto 2rem;
+            max-width: 800px;
         }
 
         .search-form {
@@ -181,178 +188,113 @@
             border-radius: 0.5rem;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        .search-button:hover {
-            background: var(--secondary-color);
         }
 
         .catalogue-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
         }
 
-        .book-card {
-            position: relative;
+        .item-card {
             background: white;
-            border-radius: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .image-container {
             position: relative;
-            width: 100%;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .book-card:hover {
-            transform: translateY(-0.5rem);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        .book-image {
+        .item-image {
             width: 100%;
-            height: 300px;
+            height: 280px;
             object-fit: cover;
-            display: block;
-        }
-
-        .book-info {
-            padding: 1.5rem;
-        }
-
-        .book-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 0 0 0.5rem 0;
-        }
-
-        .book-author {
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-        }
-
-        .book-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .borrow-button {
-            flex: 1;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 35px;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .borrow-button:hover {
-            background: var(--secondary-color);
-        }
-
-        .save-button {
-            background: #f3f4f6;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .save-button:hover {
-            background: #e5e7eb;
-        }
-
-        .loading-spinner {
-            display: none;
-            width: 2.5rem;
-            height: 2.5rem;
-            border: 0.25rem solid #f3f4f6;
-            border-top-color: var(--primary-color);
-            border-radius: 50%;
-            margin: 2rem auto;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(1rem); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slideInDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        .nav-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .nav-btn:hover {
-            background: var(--secondary-color);
-            transform: scale(1.1);
+        .item-info {
+            padding: 20px;
+        }
+        
+        .item-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
         }
 
-        .notification {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            background: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        .item-meta span {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            animation: slideIn 0.3s ease-out;
-            z-index: 1000;
+            gap: 8px;
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
+        .item-meta i {
+            width: 16px;
+            color: var(--primary-color);
+        }
+
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .status-badge.available {
+            background: #4CAF50;
+        }
+
+        .status-badge.out-of-stock {
+            background: #dc3545;
+        }
+
+        .borrow-button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .borrow-button.available {
+            background-color: #1e3c72;
+            color: white;
+        }
+
+        .borrow-button.available:hover {
+            background-color: #1e3c72;
+            transform: translateY(-2px);
+        }
+
+        .borrow-button.out-of-stock {
+            background-color: #cccccc;
+            color: white;
+            cursor: not-allowed;
         }
 
         @media (max-width: 768px) {
@@ -360,50 +302,15 @@
                 flex-direction: column;
                 gap: 16px;
             }
-
             .navbar-nav {
                 flex-direction: column;
                 width: 100%;
             }
-
             .search-form {
                 flex-direction: column;
             }
-
             .catalogue-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-            
-            .status-badge {
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                padding: 5px 10px;
-                border-radius: 15px;
-                font-size: 12px;
-                font-weight: bold;
-                color: white;
-                z-index: 2;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-
-            .book-meta {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin: 10px 0;
-                color: #666;
-                font-size: 14px;
-            }
-
-            .borrow-button:disabled {
-                cursor: not-allowed;
-                opacity: 0.7;
-            }
-
-            .borrow-button:disabled:hover {
-                background: #cccccc;
-                transform: none;
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             }
         }
     </style>
@@ -412,8 +319,7 @@
     <header>
         <nav class="navbar">
             <a href="index.jsp" class="navbar-brand animate__animated animate__fadeIn">
-                <i class="fas fa-book-reader"></i>
-                Open Library
+                <i class="fas fa-book-reader"></i> Open Library
             </a>
             <ul class="navbar-nav">
                 <% Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
@@ -445,117 +351,56 @@
                     <option value="jurnal">Journals</option>
                 </select>
                 <button type="submit" class="search-button">
-                    <i class="fas fa-search"></i>
-                    Search
+                    <i class="fas fa-search"></i> Search
                 </button>
             </form>
         </div>
 
         <div class="catalogue-grid">
-            <% List<Buku> bukuList = (List<Buku>) request.getAttribute("bukuList");
-               if (bukuList != null && !bukuList.isEmpty()) {
-                   for (Buku buku : bukuList) { %>
-                <div class="book-card">
-                    <div class="image-container">
-                        <img src="<%= buku.getGambarUrl() %>" alt="<%= buku.getJudul() %>" class="book-image">
-                        <div class="status-badge" style="background-color: <%= buku.getStok() > 0 ? "#4CAF50" : "#f44336" %>">
-                            <%= buku.getStok() > 0 ? "Tersedia" : "Stok Habis" %>
+            <% List<ItemPerpustakaan> itemList = (List<ItemPerpustakaan>) request.getAttribute("itemList");
+               if (itemList != null && !itemList.isEmpty()) {
+                   for (ItemPerpustakaan item : itemList) { %>
+                    <div class="item-card">
+                        <div class="image-container">
+                            <img src="<%= item.getGambarUrl() %>" alt="<%= item.getJudul() %>" class="item-image">
+                            <div class="status-badge <%= item.getStok() > 0 ? "available" : "out-of-stock" %>">
+                                <%= item.getStok() > 0 ? "Tersedia" : "Stok Habis" %>
+                            </div>
+                        </div>
+                        <div class="item-info">
+                            <h3 class="item-title"><%= item.getJudul() %></h3>
+                            <div class="item-meta">
+                                <% if (item instanceof Buku) { %>
+                                    <span><i class="fas fa-user"></i> Penulis: <%= ((Buku)item).getPenulis() %></span>
+                                <% } else if (item instanceof DVD) { %>
+                                    <span><i class="fas fa-film"></i> Sutradara: <%= ((DVD)item).getSutradara() %></span>
+                                <% } else if (item instanceof Jurnal) { %>
+                                    <span><i class="fas fa-scroll"></i> Penulis: <%= ((Jurnal)item).getPenulis() %></span>
+                                <% } else if (item instanceof Majalah) { %>
+                                    <span><i class="fas fa-book"></i> Edisi: <%= ((Majalah)item).getEdisi() %></span>
+                                <% } %>
+                                <span><i class="fas fa-boxes"></i> Stok: <%= item.getStok() %></span>
+                            </div>
+
+                            <div class="item-actions">
+                                <form action="<%= request.getContextPath() %>/processBorrow" method="post">
+                                    <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
+                                    <button type="submit" class="borrow-button <%= item.getStok() > 0 ? "available" : "out-of-stock" %>" 
+                                            <%= item.getStok() <= 0 ? "disabled" : "" %>>
+                                        <i class="fas <%= item.getStok() > 0 ? "fa-hand-holding" : "fa-times-circle" %>"></i>
+                                        <%= item.getStok() > 0 ? "Borrow Now" : "Out of Stock" %>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <div class="book-info">
-                        <h3 class="book-title"><%= buku.getJudul() %></h3>
-                        <p class="book-author"><i class="fas fa-user"></i> <%= buku.getPenulis() %></p>
-                        <div class="book-meta">
-                            <span><i class="fas fa-bookmark"></i> <%= buku.getItemType() %></span>
-                            <span><i class="fas fa-boxes"></i> Stok: <%= buku.getStok() %></span>
-                        </div>
-                        <div class="book-actions">
-                            <form action="<%= request.getContextPath() %>/borrowItem" method="post" style="display: inline-flex;">
-                                <input type="hidden" name="idItem" value="<%= buku.getIdItem() %>">
-                                <input type="hidden" name="itemType" value="<%= buku.getItemType() %>">
-                                <button type="submit" 
-                                        <%= buku.getStok() <= 0 ? "disabled" : "" %>
-                                        class="borrow-button"
-                                        style="background: <%= buku.getStok() <= 0 ? "#cccccc" : "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)" %>">
-                                    <i class="fas <%= buku.getStok() > 0 ? "fa-hand-holding" : "fa-times-circle" %>"></i>
-                                    <%= buku.getStok() > 0 ? "Borrow Now" : "Out of Stock" %>
-                                </button>
-                            </form>
-                            <button class="save-button" onclick="saveBook(this)">
-                                <i class="far fa-bookmark"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            <% } 
-            } else { %>
-                <div class="no-results animate__animated animate__fadeIn">
-                    <p>No books available at the moment.</p>
+                <% }
+               } else { %>
+                <div class="no-results">
+                    <p>Tidak ada item yang tersedia saat ini.</p>
                 </div>
             <% } %>
         </div>
-
-
-        <div class="loading-spinner"></div>
     </div>
-
-    <script>
-        function borrowBook(bookId) {
-            const button = event.target.closest('.borrow-button');
-            const originalContent = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            button.disabled = true;
-
-            fetch('borrowItem', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `idItem=${bookId}&itemType=buku`
-            })
-            .then(response => response.json())
-            .then(data => {
-                showNotification(data.success ? 'Book borrowed successfully!' : 'Failed to borrow book', data.success ? 'success' : 'error');
-            })
-            .catch(error => {
-                showNotification('An error occurred', 'error');
-            })
-            .finally(() => {
-                button.innerHTML = originalContent;
-                button.disabled = false;
-            });
-        }
-
-        function saveBook(button) {
-            const icon = button.querySelector('i');
-            const isSaved = icon.classList.contains('fas');
-            
-            icon.classList.toggle('far');
-            icon.classList.toggle('fas');
-            
-            showNotification(isSaved ? 'Removed from saved items' : 'Added to saved items', 'success');
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                ${message}
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease-out forwards';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // Add loading animation when searching
-        document.querySelector('.search-form').addEventListener('submit', function() {
-            document.querySelector('.loading-spinner').style.display = 'block';
-        });
-    </script>
 </body>
 </html>
