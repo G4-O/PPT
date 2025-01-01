@@ -136,7 +136,7 @@
                         <td><%= buku.getStok() %></td>
                         <td>
                             <!-- Edit and Delete Buttons -->
-                            <a href="editItemForm.jsp?id=<%= buku.getIdItem() %>&type=buku" class="btn btn-secondary">Edit</a>
+                            <a href="editItem?id=<%= buku.getIdItem() %>&type=buku" class="btn btn-secondary">Edit</a>
                             <a href="deleteItem?id=<%= buku.getIdItem() %>&type=buku" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
                         </td>
                     </tr>
@@ -145,39 +145,55 @@
                        DVD dvd = (DVD) item; 
                 %>
 
+                    <!-- Untuk DVD -->
                     <tr>
-                            <td><img src="<%= dvd.getGambarUrl() %>" alt="Gambar DVD" width="50"></td>
-                            <td><%= dvd.getIdItem() %></td>
-                            <td><%= dvd.getJudul() %></td>
-                            <td><%= dvd.getSutradara() %></td>
-                            <td><%= dvd.getDurasi() %></td>
-                            <td><%= dvd.getStok() %></td>
-                        </tr>
+                        <td><%= dvd.getIdItem() %></td>
+                        <td><%= dvd.getJudul() %></td>
+                        <td><%= dvd.getSutradara() %></td>
+                        <td><%= dvd.getDurasi() %></td>
+                        <td><img src="<%= dvd.getGambarUrl() %>" alt="Gambar DVD" width="50"></td>
+                        <td><%= dvd.getStok() %></td>
+                        <td>
+                            <a href="editItem?id=<%= dvd.getIdItem() %>&type=dvd" class="btn btn-secondary">Edit</a>
+                            <a href="deleteItem?id=<%= dvd.getIdItem() %>&type=dvd" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
 
                 <% } else if (item instanceof Jurnal && "jurnal".equals(type)) { 
                        Jurnal jurnal = (Jurnal) item; 
                 %>
 
+                    <!-- Untuk Jurnal -->
                     <tr>
-                            <td><img src="<%= jurnal.getGambarUrl() %>" alt="Gambar Jurnal" width="50"></td>
-                            <td><%= jurnal.getIdItem() %></td>
-                            <td><%= jurnal.getJudul() %></td>
-                            <td><%= jurnal.getPenulis() %></td>
-                            <td><%= jurnal.getBidang() %></td>
-                            <td><%= jurnal.getStok() %></td>
-                        </tr>
+                        <td><%= jurnal.getIdItem() %></td>
+                        <td><%= jurnal.getJudul() %></td>
+                        <td><%= jurnal.getPenulis() %></td>
+                        <td><%= jurnal.getBidang() %></td>
+                        <td><img src="<%= jurnal.getGambarUrl() %>" alt="Gambar Jurnal" width="50"></td>
+                        <td><%= jurnal.getStok() %></td>
+                        <td>
+                            <a href="editItem?id=<%= jurnal.getIdItem() %>&type=jurnal" class="btn btn-secondary">Edit</a>
+                            <a href="deleteItem?id=<%= jurnal.getIdItem() %>&type=jurnal" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+
 
                 <% } else if (item instanceof Majalah && "majalah".equals(type)) { 
                        Majalah majalah = (Majalah) item; 
                 %>
 
+                    <!-- Untuk Majalah -->
                     <tr>
-                            <td><img src="<%= majalah.getGambarUrl() %>" alt="Gambar Majalah" width="50"></td>
-                            <td><%= majalah.getIdItem() %></td>
-                            <td><%= majalah.getJudul() %></td>
-                            <td>Edisi ke-<%= majalah.getEdisi() %></td>
-                            <td><%= majalah.getStok() %></td>
-                        </tr>
+                        <td><%= majalah.getIdItem() %></td>
+                        <td><%= majalah.getJudul() %></td>
+                        <td><%= majalah.getEdisi() %></td>
+                        <td><img src="<%= majalah.getGambarUrl() %>" alt="Gambar Majalah" width="50"></td>
+                        <td><%= majalah.getStok() %></td>
+                        <td>
+                            <a href="editItem?id=<%= majalah.getIdItem() %>&type=majalah" class="btn btn-secondary">Edit</a>
+                            <a href="deleteItem?id=<%= majalah.getIdItem() %>&type=majalah" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
 
                 <% } } %>
 

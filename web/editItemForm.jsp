@@ -4,6 +4,7 @@
 <%@ page import="model.DVD" %>
 <%@ page import="model.Jurnal" %>
 <%@ page import="model.Majalah" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,119 +13,118 @@
     <title>Edit Item - Open Library</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
+            font-family: Arial, sans-serif;
             padding: 20px;
-            background-color: #f8f9fa;
         }
-        .form-container {
-            max-width: 600px;
+        form {
+            max-width: 500px;
             margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .form-container h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: calc(100% - 16px);
+        input {
+            width: 100%;
             padding: 8px;
-            margin-top: 5px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
         }
-        .form-actions {
-            text-align: center;
-        }
-        .btn {
-            padding: 10px 20px;
-            border-radius: 4px;
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
         }
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
+    <%
+        String type = (String) request.getAttribute("type");
+        ItemPerpustakaan item = (ItemPerpustakaan) request.getAttribute("item");
 
-<div class="form-container">
-    <h1>Edit Item</h1>
-
-    <% 
-       String type = request.getParameter("type");
-       ItemPerpustakaan item = (ItemPerpustakaan) request.getAttribute("item");
+        if (item == null) {
+            response.sendRedirect("dashboardItem?type=" + type + "&error=Data tidak ditemukan");
+            return;
+        }
     %>
+
+
+    <h1>Edit Item - <%= type != null ? type.toUpperCase() : "" %></h1>
 
     <form action="updateItem" method="post">
         <input type="hidden" name="type" value="<%= type %>">
         <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
 
-        <% if ("buku".equals(type)) { 
-           Buku buku = (Buku) item; 
-        %>
-           <div class="form-group">
-               <label for="judul">Judul</label>
-               <input type="text" name="judul" id="judul" value="<%= buku.getJudul() %>" required>
-           </div>
-           <div class="form-group">
-               <label for="penulis">Penulis</label>
-               <input type="text" name="penulis" id="penulis" value="<%= buku.getPenulis() %>" required>
-           </div>
-           <div class="form-group">
-               <label for="tahunTerbit">Tahun Terbit</label>
-               <input type="number" name="tahunTerbit" id="tahunTerbit" value="<%= buku.getTahunTerbit() %>" required>
-           </div>
-           <div class="form-group">
-               <label for="gambarUrl">Gambar URL</label>
-               <input type="text" name="gambarUrl" id="gambarUrl" value="<%= buku.getGambarUrl() %>" required>
-           </div>
-           <div class="form-group">
-               <label for="stok">Stok</label>
-               <input type="number" name="stok" id="stok" value="<%= buku.getStok() %>" required>
-           </div>
+        <% if ("buku".equals(type)) {
+            Buku buku = (Buku) item; %>
+            <label for="judul">Judul:</label>
+            <input type="text" id="judul" name="judul" value="<%= buku.getJudul() %>" required>
+            
+            <label for="penulis">Penulis:</label>
+            <input type="text" id="penulis" name="penulis" value="<%= buku.getPenulis() %>" required>
+            
+            <label for="tahunTerbit">Tahun Terbit:</label>
+            <input type="number" id="tahunTerbit" name="tahunTerbit" value="<%= buku.getTahunTerbit() %>" required>
+            
+            <label for="gambarUrl">Gambar URL:</label>
+            <input type="text" id="gambarUrl" name="gambarUrl" value="<%= buku.getGambarUrl() %>" required>
+            
+            <label for="stok">Stok:</label>
+            <input type="number" id="stok" name="stok" value="<%= buku.getStok() %>" required>
 
-        <% } else if ("dvd".equals(type)) { 
-           DVD dvd = (DVD) item; 
-        %>
-           <!-- Similar fields for DVD -->
+        <% } else if ("dvd".equals(type)) {
+            DVD dvd = (DVD) item; %>
+            <label for="judul">Judul:</label>
+            <input type="text" id="judul" name="judul" value="<%= dvd.getJudul() %>" required>
+            
+            <label for="sutradara">Sutradara:</label>
+            <input type="text" id="sutradara" name="sutradara" value="<%= dvd.getSutradara() %>" required>
+            
+            <label for="durasi">Durasi:</label>
+            <input type="number" id="durasi" name="durasi" value="<%= dvd.getDurasi() %>" required>
+            
+            <label for="gambarUrl">Gambar URL:</label>
+            <input type="text" id="gambarUrl" name="gambarUrl" value="<%= dvd.getGambarUrl() %>" required>
+            
+            <label for="stok">Stok:</label>
+            <input type="number" id="stok" name="stok" value="<%= dvd.getStok() %>" required>
 
-        <% } else if ("jurnal".equals(type)) { 
-           Jurnal jurnal = (Jurnal) item; 
-        %>
-           <!-- Similar fields for Jurnal -->
+        <% } else if ("jurnal".equals(type)) {
+            Jurnal jurnal = (Jurnal) item; %>
+            <label for="judul">Judul:</label>
+            <input type="text" id="judul" name="judul" value="<%= jurnal.getJudul() %>" required>
+            
+            <label for="penulis">Penulis:</label>
+            <input type="text" id="penulis" name="penulis" value="<%= jurnal.getPenulis() %>" required>
+            
+            <label for="bidang">Bidang:</label>
+            <input type="text" id="bidang" name="bidang" value="<%= jurnal.getBidang() %>" required>
+            
+            <label for="gambarUrl">Gambar URL:</label>
+            <input type="text" id="gambarUrl" name="gambarUrl" value="<%= jurnal.getGambarUrl() %>" required>
+            
+            <label for="stok">Stok:</label>
+            <input type="number" id="stok" name="stok" value="<%= jurnal.getStok() %>" required>
 
-        <% } else if ("majalah".equals(type)) { 
-           Majalah majalah = (Majalah) item; 
-        %>
-           <!-- Similar fields for Majalah -->
-
+        <% } else if ("majalah".equals(type)) {
+            Majalah majalah = (Majalah) item; %>
+            <label for="judul">Judul:</label>
+            <input type="text" id="judul" name="judul" value="<%= majalah.getJudul() %>" required>
+            
+            <label for="edisi">Edisi:</label>
+            <input type="number" id="edisi" name="edisi" value="<%= majalah.getEdisi() %>" required>
+            
+            <label for="gambarUrl">Gambar URL:</label>
+            <input type="text" id="gambarUrl" name="gambarUrl" value="<%= majalah.getGambarUrl() %>" required>
+            
+            <label for="stok">Stok:</label>
+            <input type="number" id="stok" name="stok" value="<%= majalah.getStok() %>" required>
         <% } %>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a href="dashboardItem?type=<%= type %>" class="btn btn-secondary">Cancel</a>
-        </div>
-
+        <button type="submit">Update</button>
+        <button type="button" onclick="window.location.href='dashboardItem?type=<%= type %>'">Batal</button>
     </form>
-
-</div>
-
 </body>
 </html>

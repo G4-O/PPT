@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
+
 import model.ItemPerpustakaan;
 import model.*;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,11 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
 
-/**
- *
- * @author HP Pavilion
- */
-
 @WebServlet("/editItem")
 public class EditItemServlet extends HttpServlet {
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/perpustakaan_db";
@@ -26,13 +17,21 @@ public class EditItemServlet extends HttpServlet {
     private static final String JDBC_PASSWORD = "";
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
         String idItem = request.getParameter("id");
         String type = request.getParameter("type");
+        
+        System.out.println("Processing edit request - ID: " + idItem + ", Type: " + type);
+        
+        if (idItem == null || type == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter 'id' atau 'type' tidak ditemukan.");
+            return;
+        }
 
         try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
             String query = "";
-            
             switch (type) {
                 case "buku":
                     query = "SELECT * FROM buku WHERE idItem = ?";
@@ -52,43 +51,65 @@ public class EditItemServlet extends HttpServlet {
 
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, idItem);
+                System.out.println("Executing query: " + query + " with ID: " + idItem);
                 ResultSet rs = stmt.executeQuery();
 
                 if (rs.next()) {
                     ItemPerpustakaan item;
-
                     switch (type) {
                         case "buku":
-                            item = new Buku(rs.getString("judul"), rs.getString("idItem"), rs.getString("penulis"),
-                                    rs.getInt("tahunTerbit"), rs.getString("gambarUrl"), rs.getInt("stok"));
+                            item = new Buku(
+                                rs.getString("judul"),
+                                rs.getString("idItem"),
+                                rs.getString("penulis"),
+                                rs.getInt("tahunTerbit"),
+                                rs.getString("gambarUrl"),
+                                rs.getInt("stok")
+                            );
                             break;
-
                         case "dvd":
-                            // Create DVD object
+                            item = new DVD(
+                                rs.getString("judul"),
+                                rs.getString("idItem"),
+                                rs.getString("sutradara"),
+                                rs.getInt("durasi"),
+                                rs.getString("gambarUrl"),
+                                rs.getInt("stok")
+                            );
                             break;
-
                         case "jurnal":
-                            // Create Jurnal object
+                            item = new Jurnal(
+                                rs.getString("judul"),
+                                rs.getString("idItem"),
+                                rs.getString("penulis"),
+                                rs.getString("bidang"),
+                                rs.getString("gambarUrl"),
+                                rs.getInt("stok")
+                            );
                             break;
-
                         case "majalah":
-                            // Create Majalah object
+                            item = new Majalah(
+                                rs.getString("judul"),
+                                rs.getString("idItem"),
+                                rs.getInt("edisi"),
+                                rs.getString("gambarUrl"),
+                                rs.getInt("stok")
+                            );
                             break;
-
                         default:
                             throw new IllegalArgumentException("Invalid type");
                     }
-
                     request.setAttribute("item", item);
+                    request.setAttribute("type", type);
+                    request.getRequestDispatcher("/editItemForm.jsp").forward(request, response);
+                } else {
+                    response.sendRedirect("dashboardItem?type=" + type + "&error=Data tidak ditemukan");
+                    return;
                 }
             }
-
-            request.setAttribute("type", type);
-            request.getRequestDispatcher("/editItemForm.jsp").forward(request, response);
-
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new ServletException(e);
+            throw new ServletException("Database error: " + e.getMessage(), e);
         }
     }
 }
