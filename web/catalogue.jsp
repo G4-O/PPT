@@ -389,6 +389,16 @@
                             <div class="item-actions">
                                 <form action="<%= request.getContextPath() %>/borrowItem" method="post">
                                     <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
+                                    <% if (item instanceof Buku) { %>
+                                        <input type="hidden" name="type" value="buku">
+                                    <% } else if (item instanceof DVD) { %>
+                                        <input type="hidden" name="type" value="dvd">
+                                    <% } else if (item instanceof Jurnal) { %>
+                                        <input type="hidden" name="type" value="jurnal">
+                                    <% } else if (item instanceof Majalah) { %>
+                                        <input type="hidden" name="type" value="majalah">
+                                    <% } %>
+                                    
                                     <button type="submit" class="borrow-button <%= item.getStok() > 0 ? "available" : "out-of-stock" %>"
                                         <%= item.getStok() <= 0 ? "disabled" : "" %>>
                                         <i class="fas <%= item.getStok() > 0 ? "fa-hand-holding" : "fa-times-circle" %>"></i>

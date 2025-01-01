@@ -37,13 +37,13 @@ public class DeleteItemServlet extends HttpServlet {
                     query = "DELETE FROM buku WHERE idItem=?";
                     break;
                 case "dvd":
-                    // Query for DVD
+                    query = "DELETE FROM dvd WHERE idItem=?";
                     break;
                 case "jurnal":
-                    // Query for Jurnal
+                    query = "DELETE FROM jurnal WHERE idItem=?";
                     break;
                 case "majalah":
-                    // Query for Majalah
+                    query = "DELETE FROM majalah WHERE idItem=?";
                     break;
             }
 

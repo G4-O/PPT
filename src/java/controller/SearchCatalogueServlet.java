@@ -17,6 +17,24 @@ public class SearchCatalogueServlet extends HttpServlet {
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "";
 
+    
+    public static final String toTitleCase(String input) {
+        StringBuilder titleCase = new StringBuilder(input.length());
+        boolean nextTitleCase = true;
+
+        for (char c : input.toCharArray()) {
+            if (Character.isSpaceChar(c)) {
+                nextTitleCase = true;
+            } else if (nextTitleCase) {
+                c = Character.toTitleCase(c);
+                nextTitleCase = false;
+            }
+
+            titleCase.append(c);
+        }
+
+        return titleCase.toString();
+    }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String searchTerm = request.getParameter("searchTerm");
