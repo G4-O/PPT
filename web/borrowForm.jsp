@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,8 +25,7 @@
             line-height: 1.6;
         }
 
-        /* Keep existing navbar styles */
-        
+        /* Keeping your existing navbar styles */
         header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             padding: 15px 0;
@@ -86,7 +87,7 @@
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
-        
+
         .btn {
             padding: 10px 20px;
             border-radius: 8px;
@@ -112,45 +113,48 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
         }
-        
+
+        .btn-secondary {
+            background-color: #6366f1;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(99 102 241 / 0.5);
+        }
+
         .content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 2rem auto;
-            padding: 0 2rem;
+            padding: 2rem;
             display: grid;
             grid-template-columns: 300px 1fr;
             gap: 2rem;
             animation: fadeIn 0.5s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .book-card {
-            background-color: var(--card-background);
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--card-background);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 1.5rem;
             position: sticky;
             top: 100px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .book-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
 
         .book-image {
-            width: 180px;
-            height: 270px;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            margin-bottom: 1.5rem;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 1rem;
             transition: transform 0.3s ease;
         }
 
@@ -158,56 +162,50 @@
             transform: scale(1.05);
         }
 
-        .book-info {
-            background: white;
+        .book-details {
+            background: var(--card-background);
+            border-radius: 15px;
             padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .book-info h2 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
+            margin: 2rem 0;
         }
 
         .info-item {
             background: #f8fafc;
-            padding: 1rem;
-            border-radius: 8px;
-            transition: transform 0.2s ease;
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
         }
 
         .info-item:hover {
-            transform: translateY(-2px);
+            transform: translateY(-5px);
         }
 
         .info-item h4 {
-            color: var(--secondary-color);
+            color: var(--primary-color);
             margin: 0 0 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .description {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
+        .info-item p {
+            margin: 0;
+            color: var(--text-color);
         }
 
         .borrow-form {
-            background: white;
+            margin-top: 2rem;
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .form-group {
@@ -217,7 +215,7 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: var(--secondary-color);
+            color: var(--primary-color);
             font-weight: 600;
         }
 
@@ -226,18 +224,34 @@
             padding: 0.75rem;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
-            transition: border-color 0.2s ease;
+            transition: border-color 0.3s ease;
             font-size: 1rem;
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .duration-slider {
-            width: 100%;
-            margin-top: 1rem;
+        .stock-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 1rem 0;
+            animation: pulse 2s infinite;
+        }
+
+        .in-stock {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .low-stock {
+            background: #fff7ed;
+            color: #9a3412;
         }
 
         .submit-btn {
@@ -250,31 +264,23 @@
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
-            font-size: 1.1rem;
+            margin-top: 1rem;
         }
 
         .submit-btn:hover {
             background: var(--secondary-color);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.3);
         }
 
-        .stock-status {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            margin-top: 1rem;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .in-stock {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .low-stock {
-            background: #fef9c3;
-            color: #854d0e;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         @media (max-width: 768px) {
@@ -284,7 +290,6 @@
             
             .book-card {
                 position: static;
-                margin-bottom: 2rem;
             }
         }
     </style>
@@ -319,70 +324,89 @@
         <div class="book-card">
             <img src="<%= request.getAttribute("gambarUrl") %>" alt="<%= request.getAttribute("judul") %>" class="book-image">
             <h3><%= request.getAttribute("judul") %></h3>
-            <p class="author"><% if (request.getAttribute("type").equals("dvd")) { %>
-                        <%= request.getAttribute("sutradara") %>
-                    <% } else { %>
-                        <%= request.getAttribute("penulis") %>
-                    <% } %></p>
+            <p class="author">
+                <% if (request.getAttribute("type").equals("dvd")) { %>
+                    <i class="fas fa-video"></i> <%= request.getAttribute("sutradara") %>
+                <% } else { %>
+                    <i class="fas fa-pen"></i> <%= request.getAttribute("penulis") %>
+                <% } %>
+            </p>
             <div class="stock-status <%= Integer.parseInt(request.getAttribute("stok").toString()) > 5 ? "in-stock" : "low-stock" %>">
                 <i class="fas fa-books"></i> 
                 <%= Integer.parseInt(request.getAttribute("stok").toString()) %> copies available
             </div>
         </div>
 
-        <div class="book-info">
-            <h2><%= request.getAttribute("typeName") %> Details</h2>
+        <div class="book-details">
+            <h2><i class="fas fa-info-circle"></i> <%= request.getAttribute("typeName") %> Details</h2>
+            
             <div class="info-grid">
                 <div class="info-item">
-                    <% if (request.getAttribute("type").equals("dvd")) { %>
-                        <h4><i class="fas fa-user-edit"></i> Director</h4>
-                        <p><%= request.getAttribute("sutradara") %></p>
-                    <% } else { %>
-                        <h4><i class="fas fa-user-edit"></i> Author</h4>
-                        <p><%= request.getAttribute("penulis") %></p>
-                    <% } %>
+                    <h4>
+                        <% if (request.getAttribute("type").equals("dvd")) { %>
+                            <i class="fas fa-user-edit"></i> Director
+                        <% } else { %>
+                            <i class="fas fa-user-edit"></i> Author
+                        <% } %>
+                    </h4>
+                    <p>
+                        <% if (request.getAttribute("type").equals("dvd")) { %>
+                            <%= request.getAttribute("sutradara") %>
+                        <% } else { %>
+                            <%= request.getAttribute("penulis") %>
+                        <% } %>
+                    </p>
                 </div>
+                
                 <div class="info-item">
                     <h4><i class="fas fa-tags"></i> Classification</h4>
                     <p><%= request.getAttribute("klasifikasi") %></p>
                 </div>
+                
                 <div class="info-item">
                     <h4><i class="fas fa-eye"></i> Views</h4>
                     <p><%= request.getAttribute("viewCount") %></p>
                 </div>
+                
                 <div class="info-item">
                     <h4><i class="fas fa-bookmark"></i> Field</h4>
                     <p><%= request.getAttribute("bidang") %></p>
                 </div>
             </div>
 
-            <div class="description">
-                <h4><i class="fas fa-info-circle"></i> Description</h4>
+            <div class="info-item" style="margin-top: 1rem;">
+                <h4><i class="fas fa-align-left"></i> Description</h4>
                 <p><%= request.getAttribute("deskripsi") %></p>
             </div>
 
-            <form action="<%= request.getContextPath() %>/processBorrow" method="post" class="borrow-form">
-                <input type="hidden" name="idItem" value="${idItem}">
+            <form action="processBorrow" method="post" class="borrow-form">
+                <input type="hidden" name="idItem" value="<%= request.getAttribute("idItem") %>">
                 
                 <div class="form-group">
-                    <label for="durasiPinjam">Borrowing Duration (days)</label>
-                    <input type="range" id="durasiPinjam" name="durasiPinjam" min="1" max="30" value="7" class="duration-slider" oninput="updateDurationValue(this.value)">
-                    <p id="durationValue">7 days</p>
+                    <label for="durasiPinjam">
+                        <i class="fas fa-calendar-alt"></i> 
+                        Borrow Duration (days)
+                    </label>
+                    <input type="number" 
+                           id="durasiPinjam" 
+                           name="durasiPinjam" 
+                           class="form-control" 
+                           required 
+                           min="1" 
+                           max="30"
+                           value="7">
                 </div>
 
                 <button type="submit" class="submit-btn">
-                    <i class="fas fa-book-reader"></i> Confirm Borrowing
+                    <i class="fas fa-check-circle"></i> 
+                    Confirm Borrow
                 </button>
             </form>
         </div>
     </div>
 
     <script>
-        function updateDurationValue(val) {
-            document.getElementById('durationValue').textContent = val + ' days';
-        }
-
-        // Add smooth scroll behavior
+        // Add smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -392,19 +416,38 @@
             });
         });
 
-        // Add form validation
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const duration = document.getElementById('durasiPinjam').value;
+        // Form validation and enhancement
+        const form = document.querySelector('form');
+        const durasiInput = document.getElementById('durasiPinjam');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const duration = parseInt(durasiInput.value);
             if (duration < 1 || duration > 30) {
-                e.preventDefault();
-                alert('Please select a duration between 1 and 30 days');
+                alert('Please enter a duration between 1 and 30 days');
+                return;
             }
+
+            // Add loading state to button
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.disabled = true;
+
+            // Submit the form after a brief delay to show the loading state
+            setTimeout(() => {
+                form.submit();
+            }, 500);
         });
 
-        // Add loading animation on form submit
-        document.querySelector('.submit-btn').addEventListener('click', function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        });
+        // Dynamic stock status color
+        const stockStatus = document.querySelector('.stock-status');
+        const stockCount = parseInt('<%= request.getAttribute("stok") %>');
+        
+        if (stockCount <= 3) {
+            stockStatus.style.animation = 'pulse 1s infinite';
+        }
     </script>
 </body>
 </html>
