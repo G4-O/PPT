@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 01, 2025 at 07:12 AM
+-- Generation Time: Jan 01, 2025 at 12:12 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,6 +43,28 @@ INSERT INTO `anggota` (`idAnggota`, `nama`, `idUser`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `anggota_karyawan`
+--
+
+CREATE TABLE `anggota_karyawan` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `idAnggota` varchar(50) DEFAULT NULL,
+  `nama` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `anggota_karyawan`
+--
+
+INSERT INTO `anggota_karyawan` (`id`, `username`, `email`, `password`, `idAnggota`, `nama`) VALUES
+(1, 'admin', 'admin@admin.com', 'admin', 'admin01', 'admin');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `buku`
 --
 
@@ -61,7 +83,7 @@ CREATE TABLE `buku` (
 
 INSERT INTO `buku` (`idItem`, `judul`, `penulis`, `tahunTerbit`, `gambarUrl`, `stok`) VALUES
 ('bku1', 'To Kill a Mockingbird', 'Harper Lee', 1960, 'https://cdn.britannica.com/21/182021-050-666DB6B1/book-cover-To-Kill-a-Mockingbird-many-1961.jpg?w=300', 2),
-('bku10', 'Crime and Punishment', 'Fyodor Dostoevsky', 1866, 'https://upload.wikimedia.org/wikipedia/en/4/4b/Crimeandpunishmentcover.png', 2),
+('bku10', 'Crime and Punishment', 'Fyodor Dostoevsky', 1866, 'https://upload.wikimedia.org/wikipedia/en/4/4b/Crimeandpunishmentcover.png', 1),
 ('bku2', '1984', 'George Orwell', 1949, 'https://inc.mizanstore.com/aassets/img/com_cart/produk/covBT-017.jpg', 0),
 ('bku3', 'The Great Gatsby', 'F. Scott Fitzgerald', 1925, 'https://nursaadahnubatonis.web.ugm.ac.id/wp-content/uploads/sites/8584/2021/07/The_Great_Gatsby_Cover_1925_Retouched-212x300.jpg', 0),
 ('bku4', 'The Catcher in the Rye', 'J.D. Salinger', 1951, 'https://static.periplus.com/n7sbGwpEFQtFucBzKZvDSK4rmpoQUPrOzDYhFoTDPQ2dqpkj0ClzXNCTwW1I9ivQA--', 1),
@@ -92,7 +114,7 @@ CREATE TABLE `dvd` (
 
 INSERT INTO `dvd` (`idItem`, `judul`, `sutradara`, `durasi`, `gambarUrl`, `stok`) VALUES
 ('dvd01', 'Inception', 'Christopher Nolan', 148, 'https://example.com/inception.jpg', 1),
-('dvd02', 'The Godfather', 'Francis Ford Coppola', 175, 'https://example.com/godfather.jpg', 1),
+('dvd02', 'The Godfather', 'Francis Ford Coppola', 175, 'https://example.com/godfather.jpg', 0),
 ('dvd03', 'The Dark Knight', 'Christopher Nolan', 152, 'https://example.com/darkknight.jpg', 1),
 ('dvd04', 'Pulp Fiction', 'Quentin Tarantino', 154, 'https://example.com/pulpfiction.jpg', 2),
 ('dvd05', 'The Lord of the Rings: The Return of the King', 'Peter Jackson', 201, 'https://example.com/lotr.jpg', 0),
@@ -196,7 +218,9 @@ INSERT INTO `peminjaman` (`idTransaksi`, `idItem`, `tanggalTransaksi`, `tanggalK
 ('d1693220-d73f-4220-a184-11e09eb71a53', 'bku1', 1734950644, 1735123444, NULL),
 ('d5382819-92ae-4648-a78b-dccf4ceea167', 'bku1', 1734950722, 1735123522, NULL),
 ('e0bea14f-479b-49f9-9de3-45cb3278bd1a', 'bku1', 1734950590, 1735123390, NULL),
-('PJM-072536dd', 'bku2', 1735711747, 1735884547, 'MBR-1061d98b');
+('PJM-072536dd', 'bku2', 1735711747, 1735884547, 'MBR-1061d98b'),
+('PJM-32219e89', 'dvd02', 1735713194, 1735885994, 'MBR-1061d98b'),
+('PJM-3931c660', 'bku10', 1735725863, 1735898663, 'MBR-1061d98b');
 
 -- --------------------------------------------------------
 
@@ -238,6 +262,12 @@ ALTER TABLE `anggota`
   ADD KEY `idUser` (`idUser`);
 
 --
+-- Indexes for table `anggota_karyawan`
+--
+ALTER TABLE `anggota_karyawan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `buku`
 --
 ALTER TABLE `buku`
@@ -276,6 +306,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `anggota_karyawan`
+--
+ALTER TABLE `anggota_karyawan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
