@@ -445,6 +445,7 @@
                             <form action="<%= request.getContextPath() %>/borrowItem" method="post">
                                 <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
                                 <input type="hidden" name="itemType" value="<%= item.getItemType() %>">
+                                <input type="hidden" name="type" value="<%= item.getItemType() %>">
                                 <button type="submit" 
                                         <%= item.getStok() <= 0 ? "disabled" : "" %>
                                         style="background: <%= item.getStok() <= 0 ? "#cccccc" : "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)" %>">
