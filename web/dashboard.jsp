@@ -40,7 +40,7 @@
             color: white;
             display: flex;
             flex-direction: column;
-            padding-top: 20px;
+            padding-top: 80px; /* Tambahkan padding-top */
             position: fixed;
             height: 100vh;
             transition: all 0.3s ease;
