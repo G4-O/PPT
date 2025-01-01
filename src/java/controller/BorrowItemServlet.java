@@ -25,7 +25,7 @@ public class BorrowItemServlet extends HttpServlet {
 
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
             // Ambil detail item berdasarkan idItem
-            String query = "SELECT judul, penulis, gambarUrl FROM buku WHERE idItem = ?";
+            String query = "SELECT judul, penulis, gambarUrl, deskripsi, klasifikasi, viewCount, stok, bidang FROM buku WHERE idItem = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, idItem);
                 ResultSet rs = stmt.executeQuery();
@@ -33,6 +33,11 @@ public class BorrowItemServlet extends HttpServlet {
                     request.setAttribute("judul", rs.getString("judul"));
                     request.setAttribute("penulis", rs.getString("penulis"));
                     request.setAttribute("gambarUrl", rs.getString("gambarUrl"));
+                    request.setAttribute("deskripsi", rs.getString("deskripsi"));
+                    request.setAttribute("klasifikasi", rs.getString("klasifikasi"));
+                    request.setAttribute("viewCount", rs.getInt("viewCount"));
+                    request.setAttribute("stok", rs.getInt("stok"));
+                    request.setAttribute("bidang", rs.getString("bidang"));
                 }
             }
 

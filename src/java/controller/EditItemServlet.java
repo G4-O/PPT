@@ -61,6 +61,7 @@ public class EditItemServlet extends HttpServlet {
                         case "buku":
                             item = new Buku(rs.getString("judul"), rs.getString("idItem"), rs.getString("penulis"),
                                     rs.getInt("tahunTerbit"), rs.getString("gambarUrl"), rs.getInt("stok"));
+                            request.setAttribute("item", item);
                             break;
 
                         case "dvd":
@@ -79,7 +80,7 @@ public class EditItemServlet extends HttpServlet {
                             throw new IllegalArgumentException("Invalid type");
                     }
 
-                    request.setAttribute("item", item);
+                    
                 }
             }
 

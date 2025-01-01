@@ -368,7 +368,11 @@
                             </div>
                         </div>
                         <div class="item-info">
-                            <h3 class="item-title"><%= item.getJudul() %></h3>
+                            <form action="<%= request.getContextPath() %>/showItemDescription" method="post">
+                                <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
+                                <h3 class="item-title"><%= item.getJudul() %></h3>
+                            </form>
+                            
                             <div class="item-meta">
                                 <% if (item instanceof Buku) { %>
                                     <span><i class="fas fa-user"></i> Penulis: <%= ((Buku)item).getPenulis() %></span>
@@ -397,7 +401,7 @@
                 <% }
                } else { %>
                 <div class="no-results">
-                    <p>Tidak ada item yang tersedia saat ini.</p>
+                    <p>Tidak ada item yang tersedia saat ini. debugString <%= request.getAttribute("debugString") %></p>
                 </div>
             <% } %>
         </div>
