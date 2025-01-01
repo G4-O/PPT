@@ -222,21 +222,29 @@
 
         <!-- Borrow Form -->
         <form action="<%= request.getContextPath() %>/processBorrow" method="post">
+            <!-- ID Item -->
             <input type="hidden" name="idItem" value="${idItem}">
+
+            <!-- Nama Peminjam -->
             <c:choose>
-                <c:when test="${empty param.nama}">
+                <c:when test="${empty nama}">
                     <label for="nama">Nama:</label>
                     <input type="text" name="nama" required>
                 </c:when>
                 <c:otherwise>
-                    <p>Nama: ${param.nama}</p>
-                    <input type="hidden" name="nama" value="${param.nama}">
+                    <p>Nama: ${nama}</p>
+                    <input type="hidden" name="nama" value="${nama}">
                 </c:otherwise>
             </c:choose>
+
+            <!-- Durasi Peminjaman -->
             <label for="durasiPinjam">Durasi Peminjaman (hari):</label>
             <input type="number" name="durasiPinjam" required>
+
+            <!-- Tombol Submit -->
             <button type="submit">Confirm Borrow</button>
         </form>
+
     </div>
 </body>
 </html>

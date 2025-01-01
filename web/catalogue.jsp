@@ -383,10 +383,10 @@
                             </div>
 
                             <div class="item-actions">
-                                <form action="<%= request.getContextPath() %>/processBorrow" method="post">
+                                <form action="<%= request.getContextPath() %>/borrowItem" method="post">
                                     <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
-                                    <button type="submit" class="borrow-button <%= item.getStok() > 0 ? "available" : "out-of-stock" %>" 
-                                            <%= item.getStok() <= 0 ? "disabled" : "" %>>
+                                    <button type="submit" class="borrow-button <%= item.getStok() > 0 ? "available" : "out-of-stock" %>"
+                                        <%= item.getStok() <= 0 ? "disabled" : "" %>>
                                         <i class="fas <%= item.getStok() > 0 ? "fa-hand-holding" : "fa-times-circle" %>"></i>
                                         <%= item.getStok() > 0 ? "Borrow Now" : "Out of Stock" %>
                                     </button>
