@@ -1,5 +1,9 @@
 package controller;
 
+import model.ItemPerpustakaan;
+import model.User;
+import model.Peminjaman;
+import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,8 +19,67 @@ public class ProcessBorrowServlet extends HttpServlet {
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "";
 
+<<<<<<< HEAD
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+=======
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    Integer idUserObj = (Integer) request.getSession().getAttribute("idUser");
+
+    if (idUserObj == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+
+    try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
+        String query = "SELECT p.*, i.judul FROM peminjaman p JOIN items i ON p.idItem = i.id WHERE p.idAnggota = (SELECT idAnggota FROM users WHERE id = ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, idUserObj);
+            ResultSet rs = stmt.executeQuery();
+
+            List<Peminjaman> peminjamanList = new ArrayList<>();
+            while (rs.next()) {
+                String idTransaksi = rs.getString("idTransaksi");
+                String judulItem = rs.getString("judul");
+                String idItem = rs.getString("idItem");
+                long tanggalTransaksi = rs.getLong("tanggalTransaksi");
+                long tanggalKembali = rs.getLong("tanggalKembali");
+
+                ItemPerpustakaan item = new ItemPerpustakaan(judulItem, idItem) {
+                    @Override
+                    public void tampilkanInfo() {
+                        System.out.println("Item Info: " + judul + " (" + idItem + ")");
+                    }
+
+                    @Override
+                    public String getGambarUrl() {
+                        return "default_url"; // Sesuaikan jika ada gambar
+                    }
+
+                    @Override
+                    public String getItemType() {
+                        return "General"; // Sesuaikan jika ada jenis item
+                    }
+                };
+
+                User user = new User(); // Ambil user dari session
+                Peminjaman peminjaman = new Peminjaman(idTransaksi, item, user, tanggalTransaksi, tanggalKembali);
+                peminjamanList.add(peminjaman);
+            }
+
+            request.setAttribute("peminjamanList", peminjamanList);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        request.setAttribute("message", "An error occurred while fetching your borrowed items.");
+    }
+
+    request.getRequestDispatcher("mybooks.jsp").forward(request, response);
+}
+
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+>>>>>>> f08fdda033d80d6f996089d532a92bd562c829c0
         String idItem = request.getParameter("idItem");
         String durasiPinjamStr = request.getParameter("durasiPinjam");
         String nama = request.getParameter("nama");

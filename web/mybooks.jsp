@@ -4,6 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>My Books - Open Library</title>
     <style>
         :root {
@@ -173,6 +174,16 @@
             display: inline-block;
             margin-top: 8px;
         }
+        
+        .due {
+            color:  #7d8000;
+            font-weight: 600;
+            padding: 8px 16px;
+            background-color: #fbfcca;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 8px;
+        }
 
         .days-remaining {
             color: #059669;
@@ -266,13 +277,19 @@
                                     <c:when test="${item.overdue}">
                                         <span class="overdue">
                                             <i class="fas fa-exclamation-circle"></i>
-                                            Overdue by ${item.overdueDays} days
+                                            Overdue by ${item.overdueDays} day(s)
+                                        </span>
+                                    </c:when>
+                                    <c:when test="${item.due == true}">
+                                        <span class="due">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                It's Due, Please return today!
                                         </span>
                                     </c:when>
                                     <c:otherwise>
                                         <span class="days-remaining">
                                             <i class="fas fa-clock"></i>
-                                            ${item.daysRemaining} days remaining
+                                            ${item.daysRemaining} day(s) remaining
                                         </span>
                                     </c:otherwise>
                                 </c:choose>
