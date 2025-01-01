@@ -1,19 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.ItemPerpustakaan" %>
-<%@ page import="model.Buku" %>
-<%@ page import="model.DVD" %>
-<%@ page import="model.Jurnal" %>
-<%@ page import="model.Majalah" %>
-
+<%@ page import="java.util.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Open Library</title>
+    <title>Borrow Management - Open Library</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -323,6 +317,7 @@
     </style>
 </head>
 <body>
+    <!-- Sidebar yang sama dengan dashboard.jsp -->
     <div class="sidebar">
         <h2>Open Library</h2>
         <a href="dashboardItem" class="<%= request.getParameter("type") == null ? "active" : "" %>">Dashboard</a>
@@ -343,154 +338,73 @@
             <a href="borrowManagement?status=overdue" class="<%= "overdue".equals(request.getParameter("status")) ? "active" : "" %>">Overdue Borrow</a>
         </div>
     </div>
-
-
-    <div class="main-content">
-        <% 
-        String successMessage = request.getParameter("success");
-        String errorMessage = request.getParameter("error");
-        if (successMessage != null) { 
-        %>
-            <div class="alert alert-success" role="alert">
-                <%= successMessage %>
-            </div>
-        <% } 
-        if (errorMessage != null) { 
-        %>
-            <div class="alert alert-danger" role="alert">
-                <%= errorMessage %>
-            </div>
-        <% } %>
-
-        <% 
-        String type = (String) request.getAttribute("type");
-        List<ItemPerpustakaan> items = (List<ItemPerpustakaan>) request.getAttribute("items");
-        
-        if (type == null) { 
-        %>
-            <div class="stats-container">
-                <div class="stat-card">
-                    <i class="fas fa-book"></i>
-                    <h3>Total Buku</h3>
-                    <p><%= request.getAttribute("totalBuku") %></p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-compact-disc"></i>
-                    <h3>Total DVD</h3>
-                    <p><%= request.getAttribute("totalDvd") %></p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-newspaper"></i>
-                    <h3>Total Jurnal</h3>
-                    <p><%= request.getAttribute("totalJurnal") %></p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-book-open"></i>
-                    <h3>Total Majalah</h3>
-                    <p><%= request.getAttribute("totalMajalah") %></p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <h3>Total Users</h3>
-                    <p><%= request.getAttribute("totalUsers") %></p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-handshake"></i>
-                    <h3>Total Peminjaman</h3>
-                    <p><%= request.getAttribute("totalPeminjaman") %></p>
-                </div>
-            </div>
-        <% } %>
-
-        <% if (type != null) { %>
-            <h1>Item Management - <%= type.substring(0, 1).toUpperCase() + type.substring(1) %></h1>
-            <a href="addItemForm.jsp?type=<%= type %>" class="btn btn-primary">Add Item</a>
-        <% } %>
-
-        <% if (items != null && !items.isEmpty()) { %>
-            <table>
-                <thead>
-                    <% if ("buku".equals(type)) { %>
-                        <tr><th>ID</th><th>Judul</th><th>Penulis</th><th>Tahun Terbit</th><th>Gambar</th><th>Stok</th><th>Aksi</th></tr>
-                    <% } else if ("dvd".equals(type)) { %>
-                        <tr><th>ID</th><th>Judul</th><th>Sutradara</th><th>Durasi (menit)</th><th>Gambar</th><th>Stok</th><th>Aksi</th></tr>
-                    <% } else if ("jurnal".equals(type)) { %>
-                        <tr><th>ID</th><th>Judul</th><th>Penulis</th><th>Bidang</th><th>Gambar</th><th>Stok</th><th>Aksi</th></tr>
-                    <% } else if ("majalah".equals(type)) { %>
-                        <tr><th>ID</th><th>Judul</th><th>Edisi</th><th>Gambar</th><th>Stok</th><th>Aksi</th></tr>
-                    <% } %>
-                </thead>
-                <tbody>
-                    <% for (ItemPerpustakaan item : items) { 
-                        if (item instanceof Buku && "buku".equals(type)) { 
-                            Buku buku = (Buku) item; 
-                    %>
-                        <tr>
-                            <td><%= buku.getIdItem() %></td>
-                            <td><%= buku.getJudul() %></td>
-                            <td><%= buku.getPenulis() %></td>
-                            <td><%= buku.getTahunTerbit() %></td>
-                            <td><img src="<%= buku.getGambarUrl() %>" alt="Gambar Buku" width="50"></td>
-                            <td><%= buku.getStok() %></td>
-                            <td>
-                                <a href="editItem?id=<%= buku.getIdItem() %>&type=buku" class="btn btn-secondary">Edit</a>
-                                <a href="deleteItem?id=<%= buku.getIdItem() %>&type=buku" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-                            </td>
-                        </tr>
-                    <% } else if (item instanceof DVD && "dvd".equals(type)) { 
-                        DVD dvd = (DVD) item; 
-                    %>
-                        <tr>
-                            <td><%= dvd.getIdItem() %></td>
-                            <td><%= dvd.getJudul() %></td>
-                            <td><%= dvd.getSutradara() %></td>
-                            <td><%= dvd.getDurasi() %></td>
-                            <td><img src="<%= dvd.getGambarUrl() %>" alt="Gambar DVD" width="50"></td>
-                            <td><%= dvd.getStok() %></td>
-                            <td>
-                                <a href="editItem?id=<%= dvd.getIdItem() %>&type=dvd" class="btn btn-secondary">Edit</a>
-                                <a href="deleteItem?id=<%= dvd.getIdItem() %>&type=dvd" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-                            </td>
-                        </tr>
-                    <% } else if (item instanceof Jurnal && "jurnal".equals(type)) { 
-                        Jurnal jurnal = (Jurnal) item; 
-                    %>
-                        <tr>
-                            <td><%= jurnal.getIdItem() %></td>
-                            <td><%= jurnal.getJudul() %></td>
-                            <td><%= jurnal.getPenulis() %></td>
-                            <td><%= jurnal.getBidang() %></td>
-                            <td><img src="<%= jurnal.getGambarUrl() %>" alt="Gambar Jurnal" width="50"></td>
-                            <td><%= jurnal.getStok() %></td>
-                            <td>
-                                <a href="editItem?id=<%= jurnal.getIdItem() %>&type=jurnal" class="btn btn-secondary">Edit</a>
-                                <a href="deleteItem?id=<%= jurnal.getIdItem() %>&type=jurnal" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-                            </td>
-                        </tr>
-                    <% } else if (item instanceof Majalah && "majalah".equals(type)) { 
-                        Majalah majalah = (Majalah) item; 
-                    %>
-                        <tr>
-                            <td><%= majalah.getIdItem() %></td>
-                            <td><%= majalah.getJudul() %></td>
-                            <td><%= majalah.getEdisi() %></td>
-                            <td><img src="<%= majalah.getGambarUrl() %>" alt="Gambar Majalah" width="50"></td>
-                            <td><%= majalah.getStok() %></td>
-                            <td>
-                                <a href="editItem?id=<%= majalah.getIdItem() %>&type=majalah" class="btn btn-secondary">Edit</a>
-                                <a href="deleteItem?id=<%= majalah.getIdItem() %>&type=majalah" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-                            </td>
-                        </tr>
-                    <% } 
-                    } %>
-                </tbody>
-            </table>
-        <% } else if (type != null) { %>
-            <p>Tidak ada data untuk kategori ini.</p>
-        <% } %>
+    
+    <div class="sidebar">
+        <h2>Open Library</h2>
+        <a href="dashboardItem">Dashboard</a>
+        <a href="#" class="toggle">Item Management</a>
+        <div class="submenu">
+            <a href="dashboardItem?type=buku">Buku</a>
+            <a href="dashboardItem?type=dvd">DVD</a>
+            <a href="dashboardItem?type=jurnal">Jurnal</a>
+            <a href="dashboardItem?type=majalah">Majalah</a>
+        </div>
+        <a href="#" class="toggle">Borrow Management</a>
+        <div class="submenu">
+            <a href="borrowManagement?status=active" class="<%= "active".equals(request.getParameter("status")) ? "active" : "" %>">Active Borrow</a>
+            <a href="borrowManagement?status=overdue" class="<%= "overdue".equals(request.getParameter("status")) ? "active" : "" %>">Overdue Borrow</a>
+        </div>
     </div>
 
+    <div class="main-content">
+    <h1>Borrow Management - <%= request.getAttribute("status").toString().substring(0, 1).toUpperCase() + request.getAttribute("status").toString().substring(1) %></h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID TRANSAKSI</th>
+                <th>JUDUL ITEM</th>
+                <th>ID ANGGOTA</th>
+                <th>TANGGAL PINJAM</th>
+                <th>TANGGAL KEMBALI</th>
+                <% if ("overdue".equals(request.getAttribute("status"))) { %>
+                    <th>KETERLAMBATAN</th>
+                    <th>DENDA</th>
+                <% } %>
+                <th>AKSI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% 
+            List<Map<String, Object>> borrowList = (List<Map<String, Object>>) request.getAttribute("borrowList");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            for (Map<String, Object> borrow : borrowList) {
+            %>
+            <tr>
+                <td><%= borrow.get("idTransaksi") %></td>
+                <td><%= borrow.get("judul") != null ? borrow.get("judul") : "-" %></td>
+                <td><%= borrow.get("idAnggota") != null ? borrow.get("idAnggota") : "-" %></td>
+                <td><%= sdf.format(borrow.get("tanggalTransaksi")) %></td>
+                <td><%= sdf.format(borrow.get("tanggalKembali")) %></td>
+                <% if ("overdue".equals(request.getAttribute("status"))) { %>
+                    <td><%= borrow.get("keterlambatan") %></td>
+                    <td>Rp <%= String.format("%,d", (Long)borrow.get("denda")) %></td>
+                <% } %>
+                <td>
+                    <a href="returnItem?id=<%= borrow.get("idTransaksi") %>&idItem=<%= borrow.get("idItem") %>&status=<%= request.getAttribute("status") %>" 
+                       class="btn btn-primary" onclick="return confirm('Konfirmasi pengembalian item?')">
+                        <i class="fas fa-undo"></i> Kembalikan
+                    </a>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+
     <script>
+        // Gunakan script yang sama dengan dashboard.jsp untuk toggle submenu
         document.querySelectorAll('.toggle').forEach(item => {
             item.addEventListener('click', () => {
                 item.classList.toggle('collapsed');
