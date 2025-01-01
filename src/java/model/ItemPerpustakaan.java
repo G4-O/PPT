@@ -75,7 +75,7 @@ public abstract class ItemPerpustakaan {
     
     public abstract void tampilkanInfo();
     
-    public abstract String getGambarUrl(); // Add this abstract method
+    public abstract String getGambarUrl(); // Harus diimplementasikan oleh subclass
 
     public String getJudul() {
         return judul;

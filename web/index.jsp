@@ -1,4 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.TrendingItem" %>
+<%@ page import="controller.TrendingController" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Library - Your Digital Reading Companion</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
-        /* Global Styles */
         :root {
             --primary-color: #1e3c72;
             --secondary-color: #2a5298;
@@ -27,7 +28,6 @@
             line-height: 1.6;
         }
 
-        /* Enhanced Header */
         header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             padding: 15px 0;
@@ -90,7 +90,6 @@
             transform: translateY(-2px);
         }
 
-        /* Enhanced Buttons */
         .btn {
             padding: 10px 20px;
             border-radius: 8px;
@@ -128,12 +127,10 @@
             box-shadow: 0 4px 6px -1px rgb(99 102 241 / 0.5);
         }
 
-        /* Hero Section */
         .hero {
             background: linear-gradient(rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.05));
             padding: 80px 24px;
             text-align: center;
-            animation: fadeIn 1s ease-out;
         }
 
         .hero h1 {
@@ -141,7 +138,6 @@
             font-weight: 800;
             color: var(--text-color);
             margin-bottom: 24px;
-            animation: slideInDown 1s ease-out;
         }
 
         .hero p {
@@ -149,10 +145,8 @@
             color: #64748b;
             max-width: 600px;
             margin: 0 auto 40px;
-            animation: slideInUp 1s ease-out;
         }
 
-        /* Enhanced Search Bar */
         .search-container {
             max-width: 800px;
             margin: 0 auto;
@@ -160,7 +154,6 @@
             background: white;
             border-radius: 16px;
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            animation: slideInUp 1s ease-out;
         }
 
         .search-bar {
@@ -200,7 +193,6 @@
             transform: translateY(-2px);
         }
 
-        /* Book Categories */
         .categories {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -225,340 +217,49 @@
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
         }
 
-        .category-icon {
-            font-size: 32px;
-            color: var(--primary-color);
-            margin-bottom: 16px;
-        }
-
-        /* Enhanced Book Cards */
-        
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideInDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        /* Loading Animation */
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-            display: none;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .navbar-nav {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .hero h1 {
-                font-size: 36px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .search-bar {
-                flex-direction: column;
-            }
-
-            .search-btn {
-                width: 100%;
-            }
-        }
-        
         .trending-section {
-        padding: 40px 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-    }
-
-    .trending-nav {
-        display: flex;
-        gap: 10px;
-    }
-
-    .nav-btn {
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .nav-btn:hover {
-        background: var(--secondary-color);
-        transform: scale(1.1);
-    }
-
-    .trending-books {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 30px;
-        margin-top: 20px;
-    }
-
-    .book-card {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .book-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .book-cover {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .book-cover img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-
-    .book-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .book-card:hover .book-overlay {
-        opacity: 1;
-    }
-
-    .category {
-        background: var(--primary-color);
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 14px;
-        margin-bottom: 15px;
-    }
-
-    .quick-view-btn {
-        background: white;
-        color: var(--primary-color);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-    .quick-view-btn:hover {
-        background: var(--primary-color);
-        color: white;
-    }
-
-    .book-info {
-        padding: 20px;
-    }
-
-    .book-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: var(--text-color);
-    }
-
-    .book-author {
-        color: #666;
-        margin-bottom: 10px;
-    }
-
-    .book-rating {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-
-    .stars {
-        color: #ffd700;
-    }
-
-    .rating-count {
-        color: #666;
-        font-size: 14px;
-    }
-
-    .book-description {
-        color: #444;
-        font-size: 14px;
-        margin-bottom: 20px;
-        line-height: 1.5;
-    }
-
-    .book-actions {
-        display: flex;
-        gap: 10px;
-    }
-
-    .btn-read {
-        flex: 1;
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 25px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .btn-read:hover {
-        background: var(--secondary-color);
-    }
-
-    .btn-save {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #f0f0f0;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .btn-save:hover {
-        background: #e0e0e0;
-        transform: scale(1.1);
-    }
-
-    @media (max-width: 768px) {
-        .trending-books {
-            grid-template-columns: 1fr;
-        }
-    }
-    
-    .trending-books-rev {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 32px;
-            padding: 40px 24px;
+            padding: 40px 20px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        .book-card-rev {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        .section-header {
+            margin-bottom: 30px;
         }
 
-        .book-card-rev:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-        }
-
-        .book-cover-rev {
-            position: relative;
-            padding-top: 140%;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .book-info-rev {
-            padding: 24px;
-        }
-
-        .book-title-rev {
-            font-size: 20px;
+        .section-header h2 {
+            color: var(--primary-color);
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 8px;
         }
 
-        .book-author-rev {
-            color: #64748b;
-            margin-bottom: 16px;
+        .catalogue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
         }
 
-        .book-rating-rev {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: #eab308;
-            margin-bottom: 16px;
+        .item-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
-            
-         .categories a {
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .no-items {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .categories a {
             text-decoration: none;
             color: inherit;
         }
@@ -566,35 +267,176 @@
         .categories a:hover {
             text-decoration: none;
         }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .status-badge.available {
+            background: #4CAF50;
+        }
+
+        .status-badge.out-of-stock {
+            background: #dc3545;
+        }
+
+        .borrow-button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .borrow-button.available {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .borrow-button.available:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .borrow-button.out-of-stock {
+            background-color: #dc3545;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 16px;
+            }
+            .navbar-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+            .hero h1 {
+                font-size: 36px;
+            }
+            .hero p {
+                font-size: 18px;
+            }
+            .search-bar {
+                flex-direction: column;
+            }
+            .search-btn {
+                width: 100%;
+            }
+            .catalogue-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .item-image {
+                width: 100%;
+                height: 280px;
+                object-fit: cover;
+            }
+
+            .image-container {
+                position: relative;
+            }
+
+            .item-info {
+                padding: 20px;
+            }
+
+            .item-title {
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                color: var(--text-color);
+            }
+
+            .item-meta {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 15px;
+                color: #666;
+                font-size: 14px;
+            }
+
+            .item-meta span {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .item-meta i {
+                color: var(--primary-color);
+                width: 16px;
+            }
+
+            .borrow-button {
+                width: 100%;
+                padding: 12px;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .borrow-button.available {
+                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+                color: white;
+            }
+
+            .borrow-button.out-of-stock {
+                background: #cccccc;
+                color: white;
+                cursor: not-allowed;
+            }
+
+            .borrow-button.available:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+        }
     </style>
 </head>
 <body>
     <header>
         <nav class="navbar">
-            <a href="#" class="navbar-brand animate__animated animate__fadeIn">
-                <i class="fas fa-book-reader"></i>
-                Open Library
+            <a href="#" class="navbar-brand">
+                <i class="fas fa-book-reader"></i> Open Library
             </a>
             <ul class="navbar-nav">
-                <%
-                Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-                String username = (String) session.getAttribute("loggedInUser");
-                if (isLoggedIn != null && isLoggedIn) {
-                %>
+                <% Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+                   String username = (String) session.getAttribute("loggedInUser");
+                   if (isLoggedIn != null && isLoggedIn) { %>
                     <li><a href="<%= request.getContextPath() %>/mybooks" class="nav-link"><i class="fas fa-book"></i> My Books</a></li>
                     <li><a href="<%= request.getContextPath() %>/catalogue" class="nav-link"><i class="fas fa-compass"></i> Explore</a></li>
                     <li><span style="color: white;"><i class="fas fa-user"></i> <%= username %></span></li>
                     <li><a href="logout" class="btn btn-primary">Logout</a></li>
-                <%
-                } else {
-                %>
+                <% } else { %>
                     <li><a href="<%= request.getContextPath() %>/mybooks" class="nav-link"><i class="fas fa-book"></i> My Books</a></li>
                     <li><a href="<%= request.getContextPath() %>/catalogue" class="nav-link"><i class="fas fa-compass"></i> Explore</a></li>
                     <li><a href="login.jsp" class="btn btn-primary">Log In</a></li>
                     <li><a href="signup.jsp" class="btn btn-secondary">Sign Up</a></li>
-                <%
-                }
-                %>
+                <% } %>
             </ul>
         </nav>
     </header>
@@ -602,17 +444,14 @@
     <section class="hero">
         <h1>Discover Your Next Great Read</h1>
         <p>Access millions of eBooks, audiobooks, magazines, and more from your device.</p>
-        
         <div class="search-container">
             <form action="<%= request.getContextPath() %>/searchCatalogue" method="get" class="search-bar">
                 <input type="text" name="searchTerm" class="search-input" placeholder="Search by title">
                 <button type="submit" class="search-btn">
-                    <i class="fas fa-search"></i>
-                    Search
+                    <i class="fas fa-search"></i> Search
                 </button>
             </form>
         </div>
-
     </section>
 
     <section class="categories">
@@ -646,265 +485,87 @@
         </a>
     </section>
 
-
-    <section class="trending-books-rev">
-        <div class="book-card-rev">
-            <div class="book-cover-rev" style="background-image: url('images/bookcover2.jpg')"></div>
-            <div class="book-info-rev">
-                <div class="book-title-rev">The Midnight Library</div>
-                <div class="book-author-rev">Matt Haig</div>
-                <div class="book-rating-rev">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                    <span>(4.5)</span>
-                </div>
-                <button class="btn btn-primary">
-                    <i class="fas fa-book-open"></i>
-                    Read Now
-                </button>
-            </div>
-        </div>
-        <!-- Add more book cards as needed -->
-    </section>
-
-    <div class="loading-spinner"></div>
-
-    <script>
-        // Add interactive features
-        document.addEventListener('DOMContentLoaded', function() {
-            // ... previous JavaScript functions remain the same ...
-
-            // Fixed notification system
-            const createNotification = (message, type) => {
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                
-                // Fixed icon selection logic
-                let iconName = 'info-circle'; // default icon
-                if (type === 'success') {
-                    iconName = 'check-circle';
-                } else if (type === 'error') {
-                    iconName = 'exclamation-circle';
-                }
-                
-                notification.innerHTML = `
-                    <i class="fas fa-${iconName}"></i>
-                    <span>${message}</span>
-                `;
-
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    padding: 12px 24px;
-                    background: white;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    animation: slideIn 0.3s ease-out;
-                    z-index: 1000;
-                `;
-
-                document.body.appendChild(notification);
-
-                setTimeout(() => {
-                    notification.style.animation = 'slideOut 0.3s ease-out';
-                    setTimeout(() => notification.remove(), 300);
-                }, 3000);
-            };
-
-            // Test notification function
-            const notifyBtn = document.createElement('button');
-            notifyBtn.textContent = 'Test Notification';
-            notifyBtn.onclick = () => {
-                createNotification('Test message', 'success');
-            };
-            // You can uncomment this to add a test button
-            // document.body.appendChild(notifyBtn);
-        });
-    </script>
     <section class="trending-section">
     <div class="section-header">
-        <h2>Trending Books</h2>
-        <div class="trending-nav">
-            <button class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
-            <button class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
-        </div>
+        <h2>Trending Items</h2>
     </div>
-    
-    <div class="trending-books">
-        <div class="book-card">
-            <div class="book-cover">
-                <img src="images/bookcover1.jpg" alt="Atomic Habits">
-                <div class="book-overlay">
-                    <span class="category">Self Development</span>
-                    <button class="quick-view-btn">Quick View</button>
-                </div>
-            </div>
-            <div class="book-info">
-                <h3 class="book-title">Atomic Habits</h3>
-                <p class="book-author">James Clear</p>
-                <div class="book-rating">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <span class="rating-count">4.8 (2.1k reviews)</span>
-                </div>
-                <p class="book-description">Transform your life with tiny changes that yield remarkable results.</p>
-                <div class="book-actions">
-                    <button class="btn-read"><i class="fas fa-book-reader"></i> Read Now</button>
-                    <button class="btn-save"><i class="fas fa-bookmark"></i></button>
-                </div>
-            </div>
-        </div>
+    <div class="catalogue-grid">
+        <%
+            TrendingController trendingController = new TrendingController();
+            List<TrendingItem> trendingItems = trendingController.getTrendingItems();
 
-        <div class="book-card">
-            <div class="book-cover">
-                <img src="images/bookcover2.jpg" alt="The Midnight Library">
-                <div class="book-overlay">
-                    <span class="category">Fiction</span>
-                    <button class="quick-view-btn">Quick View</button>
-                </div>
-            </div>
-            <div class="book-info">
-                <h3 class="book-title">The Midnight Library</h3>
-                <p class="book-author">Matt Haig</p>
-                <div class="book-rating">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <span class="rating-count">4.9 (1.8k reviews)</span>
-                </div>
-                <p class="book-description">Between life and death there is a library with infinite possibilities.</p>
-                <div class="book-actions">
-                    <button class="btn-read"><i class="fas fa-book-reader"></i> Read Now</button>
-                    <button class="btn-save"><i class="fas fa-bookmark"></i></button>
-                </div>
-            </div>
-        </div>
+            // Debugging output
+            if (trendingItems == null) {
+                out.println("<p style='color:red;'>Debug: trendingItems is null.</p>");
+            } else if (trendingItems.isEmpty()) {
+                out.println("<p style='color:red;'>Debug: No items found in trendingItems.</p>");
+            } else {
+                out.println("<p style='color:green;'>Debug: Found " + trendingItems.size() + " items.</p>");
+            }
 
-        <div class="book-card">
-            <div class="book-cover">
-                <img src="images/bookcover3.jpg" alt="Project Hail Mary">
-                <div class="book-overlay">
-                    <span class="category">Sci-Fi</span>
-                    <button class="quick-view-btn">Quick View</button>
-                </div>
-            </div>
-            <div class="book-info">
-                <h3 class="book-title">Project Hail Mary</h3>
-                <p class="book-author">Andy Weir</p>
-                <div class="book-rating">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <span class="rating-count">4.9 (1.5k reviews)</span>
-                </div>
-                <p class="book-description">A lone astronaut must save humanity from extinction.</p>
-                <div class="book-actions">
-                    <button class="btn-read"><i class="fas fa-book-reader"></i> Read Now</button>
-                    <button class="btn-save"><i class="fas fa-bookmark"></i></button>
-                </div>
-            </div>
-        </div>
+            if (trendingItems != null && !trendingItems.isEmpty()) {
+                for (TrendingItem item : trendingItems) {
+                    // Debugging untuk setiap item
+                    out.println("<p style='color:blue;'>Debug: Item ID=" + item.getIdItem() + ", Judul=" + item.getJudul() + ", Gambar URL=" + item.getGambarUrl() + "</p>");
+        %>
+                    <div class="item-card">
+                        <!-- Bagian gambar -->
+                        <div class="image-container">
+                            <% 
+                                String imageUrl = item.getGambarUrl();
+                                if (imageUrl == null || imageUrl.isEmpty()) {
+                                    imageUrl = request.getContextPath() + "/images/default-image.png"; // Gambar default jika URL kosong
+                                }
+                            %>
+                            <img src="<%= imageUrl %>" alt="<%= item.getJudul() %>" class="item-image">
+                            <div class="status-badge <%= item.getStok() > 0 ? "available" : "out-of-stock" %>">
+                                <%= item.getStok() > 0 ? "Tersedia" : "Stok Habis" %>
+                            </div>
+                        </div>
 
-        <div class="book-card">
-            <div class="book-cover">
-                <img src="images/bookcover4.jpg" alt="Tomorrow, and Tomorrow, and Tomorrow">
-                <div class="book-overlay">
-                    <span class="category">Literary Fiction</span>
-                    <button class="quick-view-btn">Quick View</button>
-                </div>
-            </div>
-            <div class="book-info">
-                <h3 class="book-title">Tomorrow, and Tomorrow, and Tomorrow</h3>
-                <p class="book-author">Gabrielle Zevin</p>
-                <div class="book-rating">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
+                        <!-- Informasi item -->
+                        <div class="item-info">
+                            <h3 class="item-title"><%= item.getJudul() %></h3>
+                            <div class="item-meta">
+                                <span><i class="fas fa-user"></i> <%= item.getDetail() %></span>
+                                <span><i class="fas fa-chart-line"></i> <%= item.getJumlahPeminjaman() %> peminjaman</span>
+                                <span><i class="fas fa-boxes"></i> Stok: <%= item.getStok() %></span>
+                            </div>
+
+                            <!-- Tombol pinjam -->
+                            <form action="<%= request.getContextPath() %>/processBorrow" method="post">
+                                <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
+                                <% 
+                                    boolean isAvailable = item.getStok() > 0;
+                                    String buttonClass = isAvailable ? "available" : "out-of-stock";
+                                    String buttonText = isAvailable ? "Pinjam Sekarang" : "Stok Habis";
+                                    String buttonIcon = isAvailable ? "fa-hand-holding" : "fa-times-circle";
+                                %>
+                                <button type="submit"
+                                        class="borrow-button <%= buttonClass %>"
+                                        <% if (!isAvailable) { %> disabled <% } %>>
+                                    <i class="fas <%= buttonIcon %>"></i>
+                                    <%= buttonText %>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <span class="rating-count">4.7 (980 reviews)</span>
+        <% 
+                }
+            } else { 
+        %>
+                <!-- Pesan jika tidak ada item -->
+                <div class="no-items">
+                    <p>Tidak ada item trending saat ini</p>
                 </div>
-                <p class="book-description">A story of love, creativity, and the power of video games.</p>
-                <div class="book-actions">
-                    <button class="btn-read"><i class="fas fa-book-reader"></i> Read Now</button>
-                    <button class="btn-save"><i class="fas fa-bookmark"></i></button>
-                </div>
-            </div>
-        </div>
+        <% 
+            } 
+        %>
     </div>
 </section>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const bookCards = document.querySelectorAll('.book-card');
-    const saveButtons = document.querySelectorAll('.btn-save');
-    const quickViewButtons = document.querySelectorAll('.quick-view-btn');
-    
-    // Save button functionality
-    saveButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const icon = this.querySelector('i');
-            if (icon.classList.contains('far')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-                createNotification('Book added to your library!', 'success');
-            } else {
-                icon.classList.remove('fas');
-                icon.classList.add('far');
-                createNotification('Book removed from your library!', 'info');
-            }
-        });
-    });
 
-    // Quick view functionality
-    quickViewButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Add your quick view modal logic here
-            createNotification('Quick view feature coming soon!', 'info');
-        });
-    });
 
-    // Read button functionality
-    const readButtons = document.querySelectorAll('.btn-read');
-    readButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-            
-            setTimeout(() => {
-                this.innerHTML = originalText;
-                createNotification('Opening book viewer...', 'success');
-            }, 1500);
-        });
-    });
 
-    // Initialize bookmark icons
-    saveButtons.forEach(button => {
-        button.innerHTML = '<i class="far fa-bookmark"></i>';
-    });
-});
-</script>
 </body>
 </html>
+
