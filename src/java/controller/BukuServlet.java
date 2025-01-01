@@ -28,7 +28,7 @@ public class BukuServlet extends HttpServlet {
         
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
             // Get books
-            String sqlBuku = "SELECT idItem, judul, penulis, tahunTerbit, gambarUrl FROM buku LIMIT 10";
+            String sqlBuku = "SELECT idItem, judul, penulis, tahunTerbit, gambarUrl, stok FROM buku LIMIT 10";
             try (Statement statement = connection.createStatement()) {
                 ResultSet resultSet = statement.executeQuery(sqlBuku);
                 while (resultSet.next()) {
@@ -37,9 +37,11 @@ public class BukuServlet extends HttpServlet {
                     String penulis = resultSet.getString("penulis");
                     int tahunTerbit = resultSet.getInt("tahunTerbit");
                     String gambarUrl = resultSet.getString("gambarUrl");
-                    bukuList.add(new Buku(judul, idItem, penulis, tahunTerbit, gambarUrl));
+                    int stok = resultSet.getInt("stok");
+                    bukuList.add(new Buku(judul, idItem, penulis, tahunTerbit, gambarUrl, stok));
                 }
             }
+
             
             // Get active loans
             String sqlPeminjaman = "SELECT * FROM peminjaman WHERE tanggalKembali > ?";

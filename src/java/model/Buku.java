@@ -13,8 +13,8 @@ public class Buku extends ItemPerpustakaan {
     private int tahunTerbit;
     private String gambarUrl; // URL gambar
 
-    public Buku(String judul, String idItem, String penulis, int tahunTerbit, String gambarUrl) {
-        super(judul, idItem);
+    public Buku(String judul, String idItem, String penulis, int tahunTerbit, String gambarUrl, int stok) {
+        super(judul, idItem, stok);
         this.penulis = penulis;
         this.tahunTerbit = tahunTerbit;
         this.gambarUrl = gambarUrl;

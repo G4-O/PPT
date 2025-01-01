@@ -557,6 +557,15 @@
             color: #eab308;
             margin-bottom: 16px;
         }
+            
+         .categories a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .categories a:hover {
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -595,41 +604,48 @@
         <p>Access millions of eBooks, audiobooks, magazines, and more from your device.</p>
         
         <div class="search-container">
-            <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Search by title, author, or ISBN...">
-                <button class="search-btn">
+            <form action="<%= request.getContextPath() %>/searchCatalogue" method="get" class="search-bar">
+                <input type="text" name="searchTerm" class="search-input" placeholder="Search by title">
+                <button type="submit" class="search-btn">
                     <i class="fas fa-search"></i>
                     Search
                 </button>
-            </div>
-            <div class="advanced-filters" style="display: none;">
-                <!-- Advanced search filters will go here -->
-            </div>
+            </form>
         </div>
+
     </section>
 
     <section class="categories">
-        <div class="category-card">
-            <i class="fa-solid fa-book fa-2xl"></i>
-            <h3>Books</h3>
-            <p>Explore all genres of books</p>
-        </div>
-        <div class="category-card">
-            <i class="fa-solid fa-compact-disc fa-2xl"></i>
-            <h3>DVD</h3>
-            <p>Movies, musics, softwares, and more</p>
-        </div>
-        <div class="category-card">
-            <i class="fa-solid fa-book-open fa-2xl"></i>
-            <h3>Magazine</h3>
-            <p>Get the most popular magazines here</p>
-        </div>
-        <div class="category-card">
-            <i class="fa-solid fa-copy fa-2xl"></i>
-            <h3>Journal</h3>
-            <p>Center of high credible source</p>
-        </div>
+        <a href="http://localhost:8080/PERPUSTERBUKA/searchCatalogue?searchTerm=&filterType=buku">
+            <div class="category-card">
+                <i class="fa-solid fa-book fa-2xl"></i>
+                <h3>Books</h3>
+                <p>Explore all genres of books</p>
+            </div>
+        </a>
+        <a href="http://localhost:8080/PERPUSTERBUKA/searchCatalogue?searchTerm=&filterType=dvd">
+            <div class="category-card">
+                <i class="fa-solid fa-compact-disc fa-2xl"></i>
+                <h3>DVD</h3>
+                <p>Movies, musics, softwares, and more</p>
+            </div>
+        </a>
+        <a href="http://localhost:8080/PERPUSTERBUKA/searchCatalogue?searchTerm=&filterType=majalah">
+            <div class="category-card">
+                <i class="fa-solid fa-book-open fa-2xl"></i>
+                <h3>Magazine</h3>
+                <p>Get the most popular magazines here</p>
+            </div>
+        </a>
+        <a href="http://localhost:8080/PERPUSTERBUKA/searchCatalogue?searchTerm=&filterType=jurnal">
+            <div class="category-card">
+                <i class="fa-solid fa-copy fa-2xl"></i>
+                <h3>Journal</h3>
+                <p>Center of high credible source</p>
+            </div>
+        </a>
     </section>
+
 
     <section class="trending-books-rev">
         <div class="book-card-rev">

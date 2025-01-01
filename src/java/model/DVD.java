@@ -5,12 +5,30 @@ public class DVD extends ItemPerpustakaan {
     private int durasi;
     private String gambarUrl;
 
-    public DVD(String judul, String idItem, String sutradara, int durasi, String gambarUrl) {
-        super(judul, idItem);
+    public DVD(String judul, String idItem, String sutradara, int durasi, String gambarUrl, int stok) {
+        super(judul, idItem, stok);
         this.sutradara = sutradara;
         this.durasi = durasi;
         this.gambarUrl = gambarUrl;
     }
+
+    public String getSutradara() {
+        return sutradara;
+    }
+
+    public void setSutradara(String sutradara) {
+        this.sutradara = sutradara;
+    }
+
+    public int getDurasi() {
+        return durasi;
+    }
+
+    public void setDurasi(int durasi) {
+        this.durasi = durasi;
+    }
+    
+    
 
     @Override
     public void tampilkanInfo() {

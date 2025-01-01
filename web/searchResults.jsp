@@ -1,6 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="model.ItemPerpustakaan" %>
 <%@ page import="java.util.List" %>
+<%@ page import="model.Buku" %>
+<%@ page import="model.DVD" %>
+<%@ page import="model.Jurnal" %>
+<%@ page import="model.Majalah" %>
+<%@ page import="model.ItemPerpustakaan" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -356,6 +361,17 @@
             .book-list {
                 grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             }
+            
+            .book-card button:disabled {
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+
+            .book-card button:disabled:hover {
+                background: #cccccc;
+                transform: none;
+            }
+
         }
     </style>
 </head>
@@ -363,8 +379,7 @@
     <header>
         <nav class="navbar">
             <a href="index.jsp" class="navbar-brand animate__animated animate__fadeIn">
-                <i class="fas fa-book-reader"></i>
-                Open Library
+                <i class="fas fa-book-reader"></i> Open Library
             </a>
             <ul class="navbar-nav">
                 <% Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
@@ -384,10 +399,9 @@
             </ul>
         </nav>
     </header>
-    
+
     <div class="content">
         <h2><i class="fas fa-search"></i> Search Results</h2>
-
         <div class="search-summary">
             <p>Found <strong>${searchResults.size()}</strong> items matching your search</p>
             <div class="filter-tags">
@@ -401,44 +415,57 @@
                 </span>
             </div>
         </div>
-        
+
         <div class="book-list">
             <% List<ItemPerpustakaan> searchResults = (List<ItemPerpustakaan>) request.getAttribute("searchResults");
-               if (searchResults != null && !searchResults.isEmpty()) {
-                   for (ItemPerpustakaan item : searchResults) { %>
-            <div class="book-card">
-                <div class="status-badge">Available</div>
-                <img src="<%= item.getGambarUrl() %>" alt="<%= item.getJudul() %>">
-                <div class="book-info">
-                    <h4><%= item.getJudul() %></h4>
-                    <div class="book-meta">
-                        <span><i class="fas fa-bookmark"></i> <%= item.getItemType() %></span>
-                        <span><i class="fas fa-star"></i> 4.5/5</span>
+            if (searchResults != null && !searchResults.isEmpty()) {
+                for (ItemPerpustakaan item : searchResults) { %>
+                    <div class="book-card">
+                        <img src="<%= item.getGambarUrl() %>" alt="<%= item.getJudul() %>">
+                        <div class="status-badge" style="background-color: <%= item.getStok() > 0 ? "#4CAF50" : "#f44336" %>">
+                            <%= item.getStok() > 0 ? "Tersedia" : "Stok Habis" %>
+                        </div>
+                        <div class="book-info">
+                            <h4><%= item.getJudul() %></h4>
+                            <% if (item instanceof Buku) { %>
+                                <p class="book-author"><i class="fas fa-user"></i> <%= ((Buku)item).getPenulis() %></p>
+                            <% } else if (item instanceof DVD) { %>
+                                <p class="book-author"><i class="fas fa-film"></i> <%= ((DVD)item).getSutradara() %></p>
+                            <% } else if (item instanceof Jurnal) { %>
+                                <p class="book-author"><i class="fas fa-scroll"></i> <%= ((Jurnal)item).getPenulis() %></p>
+                            <% } else if (item instanceof Majalah) { %>
+                                <p class="book-author"><i class="fas fa-magazine"></i> Edisi <%= ((Majalah)item).getEdisi() %></p>
+                            <% } %>
+                            
+                            <div class="book-meta">
+                                <span><i class="fas fa-bookmark"></i> <%= item.getItemType() %></span>
+                                <span><i class="fas fa-boxes"></i> Stok: <%= item.getStok() %></span>
+                            </div>
+
+                            <form action="<%= request.getContextPath() %>/borrowItem" method="post">
+                                <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
+                                <input type="hidden" name="itemType" value="<%= item.getItemType() %>">
+                                <button type="submit" 
+                                        <%= item.getStok() <= 0 ? "disabled" : "" %>
+                                        style="background: <%= item.getStok() <= 0 ? "#cccccc" : "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)" %>">
+                                    <i class="fas <%= item.getStok() > 0 ? "fa-hand-holding" : "fa-times-circle" %>"></i>
+                                    <%= item.getStok() > 0 ? "Borrow Now" : "Out of Stock" %>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <form action="<%= request.getContextPath() %>/borrowItem" method="post">
-                        <input type="hidden" name="idItem" value="<%= item.getIdItem() %>">
-                        <input type="hidden" name="itemType" value="<%= item.getItemType() %>">
-                        <button type="submit">
-                            <i class="fas fa-hand-holding"></i>
-                            Borrow Now
-                        </button>
-                    </form>
+                <% }
+            } else { %>
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>No items found</h3>
+                    <p>Try adjusting your search terms or filters to find what you're looking for.</p>
+                    <a href="${pageContext.request.contextPath}/catalogue" style="color: #1e3c72; text-decoration: none; margin-top: 15px; display: inline-block;">
+                        <i class="fas fa-arrow-left"></i> Back to Catalogue
+                    </a>
                 </div>
-            </div>
-            <% }
-               } else { %>
-            <div class="no-results">
-                <i class="fas fa-search"></i>
-                <h3>No items found</h3>
-                <p>Try adjusting your search terms or filters to find what you're looking for.</p>
-                <a href="${pageContext.request.contextPath}/catalogue" style="color: #1e3c72; text-decoration: none; margin-top: 15px; display: inline-block;">
-                    <i class="fas fa-arrow-left"></i> Back to Catalogue
-                </a>
-            </div>
             <% } %>
         </div>
     </div>
-
-    
 </body>
 </html>

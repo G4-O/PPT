@@ -15,21 +15,34 @@ import java.util.UUID;
 public abstract class ItemPerpustakaan {
     protected String judul;
     protected String idItem;
+    protected int stok;
     
-    public ItemPerpustakaan(String judul, String idItem) {
+    public ItemPerpustakaan(String judul, String idItem, int stok) {
         this.judul = judul;
         this.idItem = idItem;
+        this.stok = stok;
+    }
+
+    public int getStok() {
+        return stok;
+    }
+
+    public void setStok(int stok) {
+        this.stok = stok;
     }
    
     
-    public boolean statusDipinjam(List<Peminjaman> l){
+    public boolean statusDipinjam(List<Peminjaman> l) {
         long unixTime = System.currentTimeMillis() / 1000L;
-        for (Peminjaman r: l){
-            if (r.item.idItem.equals(this.idItem) && r.getTanggalKembali()>unixTime){
-                return false;
+        int dipinjam = 0;
+
+        for (Peminjaman r : l) {
+            if (r.item.idItem.equals(this.idItem) && r.getTanggalKembali() > unixTime) {
+                dipinjam++;
             }
         }
-        return true;
+
+        return dipinjam >= this.stok;
     }
     
     
@@ -56,8 +69,8 @@ public abstract class ItemPerpustakaan {
         }
     }
     
-    public boolean isAvailable(List<Peminjaman> lp){
-        return !this.statusDipinjam(lp);
+    public boolean isAvailable(List<Peminjaman> lp) {
+        return !this.statusDipinjam(lp) && this.stok > 0;
     }
     
     public abstract void tampilkanInfo();

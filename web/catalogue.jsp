@@ -199,12 +199,17 @@
         }
 
         .book-card {
+            position: relative;
             background: white;
             border-radius: 1rem;
             overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .image-container {
+            position: relative;
+            width: 100%;
         }
 
         .book-card:hover {
@@ -216,6 +221,7 @@
             width: 100%;
             height: 300px;
             object-fit: cover;
+            display: block;
         }
 
         .book-info {
@@ -367,6 +373,38 @@
             .catalogue-grid {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
+            
+            .status-badge {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                padding: 5px 10px;
+                border-radius: 15px;
+                font-size: 12px;
+                font-weight: bold;
+                color: white;
+                z-index: 2;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .book-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 10px 0;
+                color: #666;
+                font-size: 14px;
+            }
+
+            .borrow-button:disabled {
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+
+            .borrow-button:disabled:hover {
+                background: #cccccc;
+                transform: none;
+            }
         }
     </style>
 </head>
@@ -414,38 +452,48 @@
         </div>
 
         <div class="catalogue-grid">
-    <% List<Buku> bukuList = (List<Buku>) request.getAttribute("bukuList");
-       if (bukuList != null && !bukuList.isEmpty()) {
-           for (Buku buku : bukuList) { %>
-        <div class="book-card">
-            <img src="<%= buku.getGambarUrl() %>" alt="<%= buku.getJudul() %>" class="book-image">
-            <div class="book-info">
-                <h3 class="book-title"><%= buku.getJudul() %></h3>
-                <p class="book-author"><i class="fas fa-user"></i> <%= buku.getPenulis() %></p>
-                <div class="book-actions">
-                    <!-- Form untuk Borrow Now -->
-                    <form action="<%= request.getContextPath() %>/borrowItem" method="post" style="display: inline-flex;">
-                        <input type="hidden" name="idItem" value="<%= buku.getIdItem() %>">
-                        <input type="hidden" name="itemType" value="<%= buku.getItemType() %>"> <!-- Tambahkan itemType -->
-                        <button type="submit" class="borrow-button">
-                            <i class="fas fa-book-reader"></i>
-                            Borrow Now
-                        </button>
-                    </form>
-                    <!-- Tombol Save -->
-                    <button class="save-button" onclick="saveBook(this)">
-                        <i class="far fa-bookmark"></i>
-                    </button>
+            <% List<Buku> bukuList = (List<Buku>) request.getAttribute("bukuList");
+               if (bukuList != null && !bukuList.isEmpty()) {
+                   for (Buku buku : bukuList) { %>
+                <div class="book-card">
+                    <div class="image-container">
+                        <img src="<%= buku.getGambarUrl() %>" alt="<%= buku.getJudul() %>" class="book-image">
+                        <div class="status-badge" style="background-color: <%= buku.getStok() > 0 ? "#4CAF50" : "#f44336" %>">
+                            <%= buku.getStok() > 0 ? "Tersedia" : "Stok Habis" %>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title"><%= buku.getJudul() %></h3>
+                        <p class="book-author"><i class="fas fa-user"></i> <%= buku.getPenulis() %></p>
+                        <div class="book-meta">
+                            <span><i class="fas fa-bookmark"></i> <%= buku.getItemType() %></span>
+                            <span><i class="fas fa-boxes"></i> Stok: <%= buku.getStok() %></span>
+                        </div>
+                        <div class="book-actions">
+                            <form action="<%= request.getContextPath() %>/borrowItem" method="post" style="display: inline-flex;">
+                                <input type="hidden" name="idItem" value="<%= buku.getIdItem() %>">
+                                <input type="hidden" name="itemType" value="<%= buku.getItemType() %>">
+                                <button type="submit" 
+                                        <%= buku.getStok() <= 0 ? "disabled" : "" %>
+                                        class="borrow-button"
+                                        style="background: <%= buku.getStok() <= 0 ? "#cccccc" : "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)" %>">
+                                    <i class="fas <%= buku.getStok() > 0 ? "fa-hand-holding" : "fa-times-circle" %>"></i>
+                                    <%= buku.getStok() > 0 ? "Borrow Now" : "Out of Stock" %>
+                                </button>
+                            </form>
+                            <button class="save-button" onclick="saveBook(this)">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <% } 
+            } else { %>
+                <div class="no-results animate__animated animate__fadeIn">
+                    <p>No books available at the moment.</p>
+                </div>
+            <% } %>
         </div>
-    <%   }
-       } else { %>
-        <div class="no-results animate__animated animate__fadeIn">
-            <p>No books available at the moment.</p>
-        </div>
-    <% } %>
-</div>
 
 
         <div class="loading-spinner"></div>
