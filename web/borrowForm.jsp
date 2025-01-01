@@ -327,11 +327,16 @@
         </div>
 
         <div class="book-info">
-            <h2>Book Details</h2>
+            <h2><%= request.getAttribute("typeName") %> Details</h2>
             <div class="info-grid">
                 <div class="info-item">
-                    <h4><i class="fas fa-user-edit"></i> Author</h4>
-                    <p><%= request.getAttribute("penulis") %></p>
+                    <% if (request.getAttribute("type").equals("dvd")) { %>
+                        <h4><i class="fas fa-user-edit"></i> Director</h4>
+                        <p><%= request.getAttribute("sutradara") %></p>
+                    <% } else { %>
+                        <h4><i class="fas fa-user-edit"></i> Author</h4>
+                        <p><%= request.getAttribute("penulis") %></p>
+                    <% } %>
                 </div>
                 <div class="info-item">
                     <h4><i class="fas fa-tags"></i> Classification</h4>
