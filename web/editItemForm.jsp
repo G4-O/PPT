@@ -245,6 +245,14 @@
                     <label for="judul"><i class="fas fa-film"></i> Judul</label>
                     <input type="text" id="judul" name="judul" value="<%= dvd.getJudul() %>" required>
                 </div>
+                <div class="form-group">
+                    <label for="judul"><i class="fas fa-film"></i> Sutradara</label>
+                    <input type="text" id="sutradara" name="sutradara" value="<%= dvd.getSutradara()%>" required>
+                </div>
+                <div class="form-group">
+                    <label for="judul"><i class="fas fa-film"></i> Durasi (menit)</label>
+                    <input type="number" id="durasi" name="durasi" value="<%= dvd.getDurasi()%>" required>
+                </div>
                 <!-- Add other DVD fields -->
 
             <% } else if ("jurnal".equals(type)) {
@@ -254,6 +262,14 @@
                     <label for="judul"><i class="fas fa-newspaper"></i> Judul</label>
                     <input type="text" id="judul" name="judul" value="<%= jurnal.getJudul() %>" required>
                 </div>
+                <div class="form-group">
+                    <label for="judul"><i class="fas fa-newspaper"></i> Penulis</label>
+                    <input type="text" id="penulis" name="penulis" value="<%= jurnal.getPenulis()%>" required>
+                </div>
+                <div class="form-group">
+                    <label for="judul"><i class="fas fa-newspaper"></i> Bidang</label>
+                    <input type="text" id="bidang" name="bidang" value="<%= jurnal.getBidang()%>" required>
+                </div>
                 <!-- Add other Jurnal fields -->
 
             <% } else if ("majalah".equals(type)) {
@@ -262,6 +278,10 @@
                 <div class="form-group">
                     <label for="judul"><i class="fas fa-magazine"></i> Judul</label>
                     <input type="text" id="judul" name="judul" value="<%= majalah.getJudul() %>" required>
+                </div>
+                <div class="form-group">
+                    <label for="judul"><i class="fas fa-magazine"></i> Edisi</label>
+                    <input type="number" id="judul" name="judul" value="<%= majalah.getEdisi() %>" required>
                 </div>
                 <!-- Add other Majalah fields -->
             <% } %>
