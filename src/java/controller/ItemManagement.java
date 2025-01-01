@@ -29,35 +29,67 @@ public class ItemManagement extends HttpServlet {
     private static final String JDBC_PASSWORD = "";
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
         String type = request.getParameter("type");
-        List<ItemPerpustakaan> items = new ArrayList<>();
-
-        if (type == null || type.isEmpty()) {
-            request.setAttribute("error", "Silakan pilih kategori item.");
-            request.setAttribute("items", items);
-            request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
-            return;
-        }
-
+        
         try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
-            String query = "";
+            // Jika tidak ada type, tampilkan dashboard utama dengan statistik
+            if (type == null || type.isEmpty()) {
+                try (PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM buku")) {
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) request.setAttribute("totalBuku", rs.getInt(1));
+                }
+                
+                try (PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM dvd")) {
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) request.setAttribute("totalDvd", rs.getInt(1));
+                }
+                
+                try (PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM jurnal")) {
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) request.setAttribute("totalJurnal", rs.getInt(1));
+                }
+                
+                try (PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM majalah")) {
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) request.setAttribute("totalMajalah", rs.getInt(1));
+                }
+                
+                try (PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM users")) {
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) request.setAttribute("totalUsers", rs.getInt(1));
+                }
+                
+                try (PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM peminjaman")) {
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) request.setAttribute("totalPeminjaman", rs.getInt(1));
+                }
+                
+                request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
+                return;
+            }
 
+            // Jika ada type, tampilkan daftar item sesuai kategori
+            List<ItemPerpustakaan> items = new ArrayList<>();
+            String query = "";
+            
             switch (type) {
                 case "buku":
-                    query = "SELECT idItem, judul, penulis, tahunTerbit, gambarUrl, stok FROM buku";
+                    query = "SELECT * FROM buku";
                     break;
                 case "dvd":
-                    query = "SELECT idItem, judul, sutradara, durasi, gambarUrl, stok FROM dvd";
+                    query = "SELECT * FROM dvd";
                     break;
                 case "jurnal":
-                    query = "SELECT idItem, judul, penulis, bidang, gambarUrl, stok FROM jurnal";
+                    query = "SELECT * FROM jurnal";
                     break;
                 case "majalah":
-                    query = "SELECT idItem, judul, edisi, gambarUrl, stok FROM majalah";
+                    query = "SELECT * FROM majalah";
                     break;
                 default:
-                    throw new IllegalArgumentException("Invalid type");
+                    throw new ServletException("Tipe item tidak valid");
             }
 
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -65,33 +97,55 @@ public class ItemManagement extends HttpServlet {
                 while (rs.next()) {
                     switch (type) {
                         case "buku":
-                            items.add(new Buku(rs.getString("judul"), rs.getString("idItem"), rs.getString("penulis"),
-                                    rs.getInt("tahunTerbit"), rs.getString("gambarUrl"), rs.getInt("stok")));
+                            items.add(new Buku(
+                                rs.getString("judul"),
+                                rs.getString("idItem"),
+                                rs.getString("penulis"),
+                                rs.getInt("tahunTerbit"),
+                                rs.getString("gambarUrl"),
+                                rs.getInt("stok")
+                            ));
                             break;
                         case "dvd":
-                            items.add(new DVD(rs.getString("judul"), rs.getString("idItem"), rs.getString("sutradara"),
-                                    rs.getInt("durasi"), rs.getString("gambarUrl"), rs.getInt("stok")));
+                            items.add(new DVD(
+                                rs.getString("judul"),
+                                rs.getString("idItem"),
+                                rs.getString("sutradara"),
+                                rs.getInt("durasi"),
+                                rs.getString("gambarUrl"),
+                                rs.getInt("stok")
+                            ));
                             break;
                         case "jurnal":
-                            items.add(new Jurnal(rs.getString("judul"), rs.getString("idItem"), rs.getString("penulis"),
-                                    rs.getString("bidang"), rs.getString("gambarUrl"), rs.getInt("stok")));
+                            items.add(new Jurnal(
+                                rs.getString("judul"),
+                                rs.getString("idItem"),
+                                rs.getString("penulis"),
+                                rs.getString("bidang"),
+                                rs.getString("gambarUrl"),
+                                rs.getInt("stok")
+                            ));
                             break;
                         case "majalah":
-                            items.add(new Majalah(rs.getString("judul"), rs.getString("idItem"),
-                                    rs.getInt("edisi"), rs.getString("gambarUrl"), rs.getInt("stok")));
+                            items.add(new Majalah(
+                                rs.getString("judul"),
+                                rs.getString("idItem"),
+                                rs.getInt("edisi"),
+                                rs.getString("gambarUrl"),
+                                rs.getInt("stok")
+                            ));
                             break;
                     }
                 }
             }
-
+            
             request.setAttribute("items", items);
             request.setAttribute("type", type);
-            request.setAttribute("error", items.isEmpty() ? "Tidak ada data tersedia untuk kategori ini." : null);
             request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
-
+            
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ServletException(e);
+            throw new ServletException("Database error: " + e.getMessage(), e);
         }
     }
 }
+
