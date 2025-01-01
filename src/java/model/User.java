@@ -121,6 +121,7 @@ public class User {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
                     this.idUser = resultSet.getInt("id");  // Ambil idUser setelah autentikasi
+                    this.nama = resultSet.getString("nama");  // Ambil idUser setelah autentikasi
                     return true;
                 }
                 return resultSet.next();

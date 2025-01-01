@@ -43,12 +43,13 @@ public class BorrowItemServlet extends HttpServlet {
 
             // Ambil nama pengguna jika tersedia
             String userQuery = "SELECT nama FROM users WHERE id = ?";
-            try (PreparedStatement userStmt = connection.prepareStatement(userQuery)) {
-                userStmt.setInt(1, idUser);
-                ResultSet rs = userStmt.executeQuery();
-                if (rs.next()) {
-                    request.setAttribute("nama", rs.getString("nama"));
-                }
+            PreparedStatement userStmt = connection.prepareStatement(userQuery);
+            userStmt.setInt(1, idUser);
+            ResultSet rs = userStmt.executeQuery();
+            if (rs.next()) {
+                request.setAttribute("nama", rs.getString("nama")+"<-NAMA");
+            } else {
+                request.setAttribute("nama", "NAMA NOT FOUND");
             }
 
         } catch (SQLException e) {

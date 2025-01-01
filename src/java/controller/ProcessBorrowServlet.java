@@ -19,13 +19,13 @@ public class ProcessBorrowServlet extends HttpServlet {
             throws ServletException, IOException {
         String idItem = request.getParameter("idItem");
         String durasiPinjamStr = request.getParameter("durasiPinjam");
-        String nama = request.getParameter("nama");
+        //String nama = request.getParameter("nama");
         Integer idUser = (Integer) request.getSession().getAttribute("idUser");
 
         // Validasi parameter
-        if (idItem == null || durasiPinjamStr == null || nama == null) {
+        if (idItem == null || durasiPinjamStr == null) {
             request.setAttribute("success", false);
-            request.setAttribute("message", "Parameter yang diperlukan tidak lengkap");
+            request.setAttribute("message", "Parameter yang diperlukan tidak lengkap " + String.valueOf(idItem) + String.valueOf(durasiPinjamStr));
             request.getRequestDispatcher("confirmation.jsp").forward(request, response);
             return;
         }
@@ -62,7 +62,7 @@ public class ProcessBorrowServlet extends HttpServlet {
                 
                 String updateUser = "UPDATE users SET nama = ?, idAnggota = ? WHERE id = ?";
                 try (PreparedStatement updateStmt = connection.prepareStatement(updateUser)) {
-                    updateStmt.setString(1, nama);
+                    updateStmt.setString(1, currentNama);
                     updateStmt.setString(2, idAnggota);
                     updateStmt.setInt(3, idUser);
                     updateStmt.executeUpdate();
