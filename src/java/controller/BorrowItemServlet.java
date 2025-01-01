@@ -16,6 +16,7 @@ public class BorrowItemServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idItem = request.getParameter("idItem");
+        String type = request.getParameter("type");
         Integer idUser = (Integer) request.getSession().getAttribute("idUser");
 
         if (idUser == null) {
@@ -25,7 +26,10 @@ public class BorrowItemServlet extends HttpServlet {
 
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
             // Ambil detail item berdasarkan idItem
-            String query = "SELECT judul, penulis, gambarUrl, deskripsi, klasifikasi, viewCount, stok, bidang FROM buku WHERE idItem = ?";
+            
+            String query = "SELECT judul, penulis, gambarUrl, deskripsi, klasifikasi, viewCount, stok, bidang FROM "+type+" WHERE idItem = ?";
+            
+            
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, idItem);
                 ResultSet rs = stmt.executeQuery();
