@@ -57,15 +57,11 @@ public class EditItemServlet extends HttpServlet {
                 if (rs.next()) {
                     ItemPerpustakaan item;
                     switch (type) {
-                        case "buku":
-                            item = new Buku(
-                                rs.getString("judul"),
-                                rs.getString("idItem"),
-                                rs.getString("penulis"),
-                                rs.getInt("tahunTerbit"),
-                                rs.getString("gambarUrl"),
-                                rs.getInt("stok")
-                            );
+                        case "buku":                            
+
+                            item = new Buku(rs.getString("judul"), rs.getString("idItem"), rs.getString("penulis"),
+                                    rs.getInt("tahunTerbit"), rs.getString("gambarUrl"), rs.getInt("stok"));
+                            request.setAttribute("item", item);
                             break;
                         case "dvd":
                             item = new DVD(
@@ -98,7 +94,7 @@ public class EditItemServlet extends HttpServlet {
                             break;
                         default:
                             throw new IllegalArgumentException("Invalid type");
-                    }
+                    }            
                     request.setAttribute("item", item);
                     request.setAttribute("type", type);
                     request.getRequestDispatcher("/editItemForm.jsp").forward(request, response);

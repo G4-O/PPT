@@ -8,7 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +30,9 @@ public class BukuServlet extends HttpServlet {
             throws ServletException, IOException {
         List<ItemPerpustakaan> itemList = new ArrayList<>();
         List<Peminjaman> peminjamanList = new ArrayList<>();
-
+        String debugString = "got to line 26";
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
-            // Query untuk mengambil semua item dari berbagai tabel
+            debugString+="got to line 28";
             String sqlItems = 
                 "SELECT 'buku' as tipe, idItem, judul, penulis as creator, tahunTerbit as info1, null as info2, gambarUrl, stok FROM buku " +
                 "UNION ALL " +
@@ -34,9 +41,10 @@ public class BukuServlet extends HttpServlet {
                 "SELECT 'jurnal' as tipe, idItem, judul, penulis as creator, bidang as info1, null as info2, gambarUrl, stok FROM jurnal " +
                 "UNION ALL " +
                 "SELECT 'majalah' as tipe, idItem, judul, null as creator, edisi as info1, null as info2, gambarUrl, stok FROM majalah";
-
+            debugString+="got to line 37";
             try (Statement statement = connection.createStatement()) {
                 ResultSet resultSet = statement.executeQuery(sqlItems);
+                debugString+="got to line 40";
                 while (resultSet.next()) {
                     String tipe = resultSet.getString("tipe");
                     String idItem = resultSet.getString("idItem");
@@ -46,6 +54,7 @@ public class BukuServlet extends HttpServlet {
                     String gambarUrl = resultSet.getString("gambarUrl");
                     int stok = resultSet.getInt("stok");
 
+                    debugString += "got a "+tipe+"! with judul = "+judul;
                     switch(tipe) {
                         case "buku":
                             itemList.add(new Buku(judul, idItem, creator, 
@@ -66,7 +75,7 @@ public class BukuServlet extends HttpServlet {
                     }
                 }
             }
-
+            debugString+="got to line 71";
             // Get active loans
             String sqlPeminjaman = "SELECT * FROM peminjaman WHERE tanggalKembali > ?";
             try (PreparedStatement pstmt = connection.prepareStatement(sqlPeminjaman)) {
@@ -93,9 +102,10 @@ public class BukuServlet extends HttpServlet {
                 }
             }
         } catch (SQLException e) {
+            debugString+="got to line 98 (error):"+e;
             e.printStackTrace();
         }
-
+        request.setAttribute("debugString",debugString);
         request.setAttribute("itemList", itemList);
         request.setAttribute("peminjamanList", peminjamanList);
         request.getRequestDispatcher("catalogue.jsp").forward(request, response);

@@ -79,7 +79,26 @@
         }
         .btn-danger {
             background-color: #dc3545;
+            
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
         }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+    }
     </style>
 </head>
 <body>
@@ -97,6 +116,22 @@
 </div>
 
 <div class="main-content">
+    <% 
+    String successMessage = request.getParameter("success");
+    String errorMessage = request.getParameter("error");
+    if (successMessage != null) { 
+    %>
+        <div class="alert alert-success" role="alert">
+            <%= successMessage %>
+        </div>
+    <% } 
+    if (errorMessage != null) { 
+    %>
+        <div class="alert alert-danger" role="alert">
+            <%= errorMessage %>
+        </div>
+    <% } %>
+    
     <% 
        String type = (String) request.getAttribute("type"); 
        List<ItemPerpustakaan> items = (List<ItemPerpustakaan>) request.getAttribute("items"); 

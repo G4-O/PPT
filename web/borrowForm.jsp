@@ -225,17 +225,13 @@
             <!-- ID Item -->
             <input type="hidden" name="idItem" value="${idItem}">
 
-            <!-- Nama Peminjam -->
-            <c:choose>
-                <c:when test="${empty nama}">
-                    <label for="nama">Nama:</label>
-                    <input type="text" name="nama" required>
-                </c:when>
-                <c:otherwise>
-                    <p>Nama: ${nama}</p>
-                    <input type="hidden" name="nama" value="${nama}">
-                </c:otherwise>
-            </c:choose>
+            <p>judul: <%= request.getAttribute("judul") %></p>
+            <p>penulis: <%= request.getAttribute("penulis") %></p>
+            <p>deskripsi: <%= request.getAttribute("deskripsi") %></p>
+            <p>klasifikasi: <%= request.getAttribute("klasifikasi") %></p>
+            <p>views: <%= request.getAttribute("viewCount") %></p>
+            <p>stok: <%= request.getAttribute("stok") %></p>
+            <p>bidang: <%= request.getAttribute("bidang") %></p>
 
             <!-- Durasi Peminjaman -->
             <label for="durasiPinjam">Durasi Peminjaman (hari):</label>

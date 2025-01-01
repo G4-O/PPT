@@ -23,6 +23,7 @@ public class LoginServlet extends HttpServlet {
             // Store user data in session
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", username);
+            session.setAttribute("nama", user.getNama());
             session.setAttribute("isLoggedIn", true);
             session.setAttribute("idUser", user.getIdUser()); // Ensure this is correctly retrieved as Integer
             
