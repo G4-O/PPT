@@ -3,6 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/AddItemServlet.java</file>
+            <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/web/editItemForm.jsp</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/LoginServlet.java</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/MyBooksServlet.java</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/model/Majalah.java</file>
@@ -16,10 +18,14 @@
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/SignupServlet.java</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/CatalogController.java</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/ProcessBorrowServlet.java</file>
+            <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/ItemManagement.java</file>
+            <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/web/dashboard.jsp</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/web/searchResults.jsp</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/SearchCatalogueServlet.java</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/driver/JDBC.java</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/model/BorrowedItem.java</file>
+            <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/web/addItemForm.jsp</file>
+            <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/EditItemServlet.java</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/src/java/controller/BukuServlet.java</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/web/borrowForm.jsp</file>
             <file>file:/C:/Users/ADVAN/Documents/Kuliah/Semester%205/PBO/PPT/web/signup.jsp</file>
